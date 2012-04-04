@@ -1,12 +1,4 @@
-This plugin contains code from Thomas Cheyney (hereby known as Top_Cat), which
-is not licensed under a GPL-compatible license. MineQuest has obtained full
-permission to use, modify, open-source, and distribute as part of the rest of
-the plugin.
 
-For contact information, see Top_Cat's Github profile (http://github.com/Top_Cat).
-
-MineQuest-NPC (and its components, excluding above component) is licensed
-under the GNU General Public License, version 2 or later at your choice.
 
                     GNU GENERAL PUBLIC LICENSE
                        Version 2, June 1991
