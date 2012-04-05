@@ -234,13 +234,13 @@ public class PlayerManager implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDeath(PlayerDeathEvent e){
 		e.setDroppedExp(0);
-		PlayerDetails p = getPlayerDetails(e.getEntity());
-		p.setHealth(p.getMaxHealth());
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerRespawn(PlayerRespawnEvent e){
-		getPlayerDetails(e.getPlayer()).updateMinecraftView();
+		PlayerDetails p = getPlayerDetails(e.getPlayer());
+		p.setHealth(p.getMaxHealth());
+		p.updateMinecraftView();
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
