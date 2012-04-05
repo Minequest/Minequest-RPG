@@ -189,17 +189,17 @@ public class PlayerDetails implements Serializable {
 		double exptonext = ((3.5*level)+6.7);
 		double percentageiwant = exp/(getMaxExperience());
 		double soihave = (exptonext/100)*percentageiwant;
-		return (int) (curlevel+soihave);
+		return (int) Math.round(curlevel+soihave);
 	}
 	
 	public synchronized int getMinecraftMana(long mana){
 		double percentage = mana/(getMaxMana());
-		return (int) ((double)(20/100)*percentage);
+		return (int) Math.round((double)20*percentage);
 	}
 	
 	public synchronized int getMinecraftHealth(long health){
-		double percentage = health/(getMaxHealth());
-		return (int) ((double)(20/100)*percentage);
+		double percentage = health/getMaxHealth();
+		return (int) Math.round((double)20*percentage);
 	}
 
 }
