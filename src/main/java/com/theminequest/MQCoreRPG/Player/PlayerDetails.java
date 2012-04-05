@@ -75,7 +75,7 @@ public class PlayerDetails implements Serializable {
 		level = 1;
 		exp = 0;
 		health = getMaxHealth();
-		mana = getMaxMana()*(3/4);
+		mana = getMaxMana();
 		updateMinecraftView();
 	}
 	
