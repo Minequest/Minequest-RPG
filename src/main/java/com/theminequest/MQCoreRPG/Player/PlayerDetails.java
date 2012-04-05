@@ -19,6 +19,7 @@
  **/
 package com.theminequest.MQCoreRPG.Player;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -46,8 +47,13 @@ import com.theminequest.MineQuest.BukkitEvents.PlayerManaEvent;
  * @author MineQuest
  * 
  */
-public class PlayerDetails {
+public class PlayerDetails implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2315094916617378789L;
+	
 	private Player player;
 	private boolean abilitiesEnabled;
 	// >_>
