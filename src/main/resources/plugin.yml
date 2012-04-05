@@ -1,5 +1,5 @@
 name: MineQuest-NPC
-main: com.theminequest.MQCoreNPC.MQCoreNPC
+main: com.theminequest.MQCoreRPG.MQCoreRPG
 version: ${build.number}
 
 author: JMonk
