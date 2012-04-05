@@ -157,8 +157,8 @@ public class PlayerDetails implements Serializable {
 		return MQCoreRPG.classManager.getClassDetail(classid).getBaseHealth()*level;
 	}
 	
-	public synchronized void setHealth(int health){
-		this.health = health;
+	public synchronized void setHealth(long l){
+		this.health = l;
 	}
 	
 	/*

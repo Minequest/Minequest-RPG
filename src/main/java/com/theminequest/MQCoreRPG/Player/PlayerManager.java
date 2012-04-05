@@ -42,6 +42,7 @@ import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 import com.theminequest.MQCoreRPG.MQCoreRPG;
 import com.theminequest.MineQuest.MineQuest;
@@ -233,6 +234,13 @@ public class PlayerManager implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDeath(PlayerDeathEvent e){
 		e.setDroppedExp(0);
+		PlayerDetails p = getPlayerDetails(e.getEntity());
+		p.setHealth(p.getMaxHealth());
+	}
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerRespawn(PlayerRespawnEvent e){
+		getPlayerDetails(e.getPlayer()).updateMinecraftView();
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
