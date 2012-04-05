@@ -11,8 +11,8 @@ import com.theminequest.MineQuest.MineQuest;
 public class PlayerSQL {
 	
 	private static final String PLAYER_ADD = "INSERT INTO mq_player VALUES (?, ?)";
-	private static final String PLAYER_UPDATE = "UPDATE mq_player SET object = '?' WHERE P_NAME = '?'";
-	private static final String PLAYER_RETRIEVE = "SELECT object FROM mq_player WHERE (P_NAME='?');";
+	private static final String PLAYER_UPDATE = "UPDATE mq_player SET object = ? WHERE P_NAME = ?";
+	private static final String PLAYER_RETRIEVE = "SELECT object FROM mq_player WHERE P_NAME = ?";
 
 	public static void insertPlayerObject(String user, PlayerDetails params) throws SQLException {
 		DatabaseHandler db = MineQuest.sqlstorage.getDB();
