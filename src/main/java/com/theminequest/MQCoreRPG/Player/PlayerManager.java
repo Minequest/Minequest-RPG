@@ -81,7 +81,8 @@ public class PlayerManager implements Listener {
 					if (!chill){
 						chill = true;
 						for (PlayerDetails d : players.values()){
-							d.modifyManaBy(1);
+							if (d.giveMana)
+								d.modifyManaBy(1);
 						}
 						chill = false;
 					}
@@ -156,6 +157,7 @@ public class PlayerManager implements Listener {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
+		players.remove(e.getPlayer());
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -166,6 +168,7 @@ public class PlayerManager implements Listener {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
+		players.remove(e.getPlayer());
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -234,6 +237,9 @@ public class PlayerManager implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDeath(PlayerDeathEvent e){
 		e.setDroppedExp(0);
+		PlayerDetails p = getPlayerDetails(e.getEntity());
+		p.setHealth(0);
+		p.giveMana = false;
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -241,6 +247,7 @@ public class PlayerManager implements Listener {
 		PlayerDetails p = getPlayerDetails(e.getPlayer());
 		p.setHealth(p.getMaxHealth());
 		p.updateMinecraftView();
+		p.giveMana = true;
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)

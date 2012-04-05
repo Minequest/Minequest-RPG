@@ -59,6 +59,8 @@ public class PlayerDetails implements Serializable {
 	public LinkedHashMap<Ability,Long> abilitiesCoolDown;
 	// end >_>
 	
+	protected volatile boolean giveMana;
+	
 	// player properties
 	private String name;
 	private long health;
@@ -75,7 +77,8 @@ public class PlayerDetails implements Serializable {
 		level = 1;
 		exp = 0;
 		health = getMaxHealth();
-		mana = getMaxMana();
+		mana = Math.round(getMaxMana()*0.75);
+		giveMana = true;
 		updateMinecraftView();
 	}
 	
@@ -185,21 +188,25 @@ public class PlayerDetails implements Serializable {
 	
 	public synchronized int getMinecraftExp(long exp, int level){
 		// (Math.pow(1.75[Level],2) + 5.00[Level]) + (3.5[Current Level] + 6.7)
-		double curlevel = (Math.pow(1.75*level,2)+(5*level));
-		double exptonext = ((3.5*level)+6.7);
-		double percentageiwant = exp/(getMaxExperience());
-		double soihave = (exptonext/100)*percentageiwant;
+		double curlevel = (Math.pow(1.75*(double)level,2)+(5*(double)level));
+		double exptonext = ((3.5*(double)level)+6.7);
+		double percentageiwant = exp/getMaxExperience();
+		double soihave = exptonext*percentageiwant;
 		return (int) Math.round(curlevel+soihave);
 	}
 	
 	public synchronized int getMinecraftMana(long mana){
-		double percentage = mana/(getMaxMana());
+		double percentage = mana/getMaxMana();
 		return (int) Math.round((double)20*percentage);
 	}
 	
 	public synchronized int getMinecraftHealth(long health){
 		double percentage = health/getMaxHealth();
 		return (int) Math.round((double)20*percentage);
+	}
+	
+	protected static void verifyObject(PlayerDetails d){
+		
 	}
 
 }
