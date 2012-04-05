@@ -18,7 +18,7 @@ public class ClassManager implements Listener {
 	private LinkedHashMap<String,ClassDetails> classes;
 
 	public ClassManager(){
-		MineQuest.log("[Class] Starting Class Manager...");
+		MineQuest.log("[Class] Starting Manager...");
 		classes = new LinkedHashMap<String,ClassDetails>();
 		initialize();
 		classes.put("default", new ClassDetails());
