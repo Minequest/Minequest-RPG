@@ -174,6 +174,10 @@ public class PlayerDetails implements Serializable {
 	}
 	
 	public synchronized void updateMinecraftView(){
+		System.out.println(getExperience());
+		System.out.println(getLevel());
+		System.out.println(getMinecraftExp(getExperience(),getLevel()));
+		System.out.println(getPlayer());
 		getPlayer().setTotalExperience(getMinecraftExp(getExperience(),getLevel()));
 		getPlayer().setFoodLevel(getMinecraftMana(getMana()));
 		getPlayer().setHealth(getMinecraftHealth(getHealth()));
