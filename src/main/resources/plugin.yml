@@ -1,4 +1,4 @@
-name: MineQuest-NPC
+name: MineQuest-RPG
 main: com.theminequest.MQCoreRPG.MQCoreRPG
 version: ${build.number}
 
@@ -13,13 +13,13 @@ load: POSTWORLD
 depend: [MineQuest]
 
 commands:
-   mqnpc:
-      aliases: [npc]
-      description: NPC Command for MineQuest
+   player:
+      aliases: [mqplayer]
+      description: Player Command for MineQuest
       usage: /<command>
-      permission: minequest.npc
+      permission: minequest.rpg
 
 permissions:
-  minequest.npc:
-    description: Allows NPC commands
-    default: op
+  minequest.rpg:
+    description: Allows RPG commands
+    default: true
