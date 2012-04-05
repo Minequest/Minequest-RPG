@@ -54,13 +54,13 @@ public class PlayerDetails implements Serializable {
 	 */
 	private static final long serialVersionUID = -2315094916617378789L;
 	
-	private Player player;
 	private boolean abilitiesEnabled;
 	// >_>
 	public LinkedHashMap<Ability,Long> abilitiesCoolDown;
 	// end >_>
 	
 	// player properties
+	private String name;
 	private long health;
 	private long mana;
 	private int level;
@@ -68,7 +68,7 @@ public class PlayerDetails implements Serializable {
 	private String classid;
 	
 	public PlayerDetails(Player p) {
-		player = p;
+		name = p.getName();
 		abilitiesEnabled = false;
 		abilitiesCoolDown = new LinkedHashMap<Ability,Long>();
 		classid = "default";
@@ -80,7 +80,7 @@ public class PlayerDetails implements Serializable {
 	}
 	
 	public Player getPlayer(){
-		return player;
+		return Bukkit.getPlayerExact(name);
 	}
 	
 	public synchronized int getLevel(){
@@ -93,7 +93,7 @@ public class PlayerDetails implements Serializable {
 	
 	public synchronized void levelUp(){
 		level+=1;
-		PlayerLevelEvent event = new PlayerLevelEvent(player);
+		PlayerLevelEvent event = new PlayerLevelEvent(getPlayer());
 		Bukkit.getPluginManager().callEvent(event);
 		exp = exp-(MQCoreRPG.classManager.getClassDetail(classid).getBaseExp()*(level-1));
 		if (exp<0)
@@ -111,7 +111,7 @@ public class PlayerDetails implements Serializable {
 	
 	public synchronized void modifyExperienceBy(int e){
 		exp+=e;
-		PlayerExperienceEvent event = new PlayerExperienceEvent(player, e);
+		PlayerExperienceEvent event = new PlayerExperienceEvent(getPlayer(), e);
 		Bukkit.getPluginManager().callEvent(event);
 		while (exp>=getMaxExperience())
 			levelUp();
@@ -142,7 +142,7 @@ public class PlayerDetails implements Serializable {
 		else if (m+mana>(getMaxMana()))
 			manatoadd = (getMaxMana())-(m+mana);
 		mana+=manatoadd;
-		PlayerManaEvent event = new PlayerManaEvent(player,m);
+		PlayerManaEvent event = new PlayerManaEvent(getPlayer(),m);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isCancelled())
 			mana-=manatoadd;
@@ -174,9 +174,9 @@ public class PlayerDetails implements Serializable {
 	}
 	
 	public synchronized void updateMinecraftView(){
-		player.setTotalExperience(getMinecraftExp(getExperience(),getLevel()));
-		player.setFoodLevel(getMinecraftMana(getMana()));
-		player.setHealth(getMinecraftHealth(getHealth()));
+		getPlayer().setTotalExperience(getMinecraftExp(getExperience(),getLevel()));
+		getPlayer().setFoodLevel(getMinecraftMana(getMana()));
+		getPlayer().setHealth(getMinecraftHealth(getHealth()));
 	}
 	
 	public synchronized int getMinecraftExp(long exp, int level){
