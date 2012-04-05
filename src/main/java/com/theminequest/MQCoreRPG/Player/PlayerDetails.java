@@ -66,44 +66,21 @@ public class PlayerDetails implements Serializable {
 	private int level;
 	private long exp;
 	private String classid;
-
-	public PlayerDetails(Player p) throws SQLException {
+	
+	public PlayerDetails(Player p) {
 		player = p;
-		reload();
+		abilitiesEnabled = false;
 		abilitiesCoolDown = new LinkedHashMap<Ability,Long>();
-		// check for player existence in DB.
-		// if player does not, add.
-		ResultSet playerresults = MineQuest.sqlstorage.querySQL("Players/retrievePlayer", p.getName());
-		if (playerresults==null || !playerresults.first()){
-			// this means that the player does not exist; add them.
-			MineQuest.log("[Player] Player not found in SQL; creating: " + p.getName());
-			MineQuest.sqlstorage.querySQL("Players/addPlayer",p.getName());
-			classid = "default";
-			level = 1;
-			exp = 0;
-		}else{
-			classid = playerresults.getString("C_ID");
-			if (classid.equals(""))
-				classid = "default";
-			level = playerresults.getInt("LEVEL");
-			exp = playerresults.getLong("EXP");
-		}
-		// give the player almost full mana (3/4 full)
+		classid = "default";
+		level = 1;
+		exp = 0;
 		health = getMaxHealth();
 		mana = getMaxMana()*(3/4);
-		
 		updateMinecraftView();
-		// and feel happeh.
-	}
-
-	protected synchronized void reload() {
-		abilitiesEnabled = false;
 	}
 	
-	public synchronized void save(){
-		MineQuest.sqlstorage.querySQL("Players/modPlayer_class",String.valueOf(classid),player.getName());
-		MineQuest.sqlstorage.querySQL("Players/modPlayer_exp",String.valueOf(level),player.getName());
-		MineQuest.sqlstorage.querySQL("Players/modPlayer_lvl",String.valueOf(exp),player.getName());
+	public Player getPlayer(){
+		return player;
 	}
 	
 	public synchronized int getLevel(){

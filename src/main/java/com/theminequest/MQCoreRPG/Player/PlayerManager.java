@@ -20,7 +20,9 @@
 package com.theminequest.MQCoreRPG.Player;
 
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -49,15 +51,13 @@ import com.theminequest.MineQuest.BukkitEvents.GroupInviteEvent;
 
 public class PlayerManager implements Listener {
 
-	private LinkedHashMap<Player,PlayerDetails> players;
-	private Object playerlock;
+	private Map<Player,PlayerDetails> players;
 	private volatile boolean shutdown;
 	private volatile boolean chill;
 
 	public PlayerManager(){
 		MineQuest.log("[Player] Starting Manager...");
-		players = new LinkedHashMap<Player,PlayerDetails>();
-		playerlock = new Object();
+		players = Collections.synchronizedMap(new LinkedHashMap<Player,PlayerDetails>());
 		shutdown = false;
 		chill = false;
 
@@ -79,15 +79,13 @@ public class PlayerManager implements Listener {
 				while (!shutdown){
 					if (!chill){
 						chill = true;
-						synchronized(playerlock){
-							for (PlayerDetails d : players.values()){
-								d.modifyManaBy(1);
-							}
+						for (PlayerDetails d : players.values()){
+							d.modifyManaBy(1);
 						}
 						chill = false;
 					}
 					try {
-						Thread.sleep(r.nextInt(2000)+4000);
+						Thread.sleep(r.nextInt(10000)+5000);
 					} catch (InterruptedException e) {
 						throw new RuntimeException(e);
 					}
@@ -107,57 +105,68 @@ public class PlayerManager implements Listener {
 	}
 
 	public void saveAll(){
-		synchronized(playerlock){
-			for (PlayerDetails d : players.values())
-				d.save();
-		}
-	}
-
-	private void playerAcct(Player p){
-		synchronized(playerlock){
-			if (!players.containsKey(p)){
-				try {
-					players.put(p,new PlayerDetails(p));
-				} catch (SQLException e) {
-					throw new RuntimeException(e);
-				}
-			} else {
-				players.get(p).reload();
+		for (PlayerDetails d : players.values()){
+			try {
+				PlayerSQL.updatePlayerObject(d.getPlayer().getName(), d);
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
 		}
 	}
 
-	public PlayerDetails getPlayerDetails(Player p){
-		synchronized(playerlock){
-			playerAcct(p);
-			return players.get(p);
+	private void playerAcct(Player p){
+		if (!players.containsKey(p)){
+			PlayerDetails obj;
+			try {
+				obj = PlayerSQL.retrievePlayerObject(p.getName());
+				if (obj!=null){
+					players.put(p, obj);
+					return;
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			obj = new PlayerDetails(p);
+			try {
+				PlayerSQL.insertPlayerObject(p.getName(), obj);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			players.put(p, obj);
 		}
+	}
+
+	public PlayerDetails getPlayerDetails(Player p){
+		playerAcct(p);
+		return players.get(p);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerJoin(PlayerJoinEvent e){
 		MineQuest.log("[Player] Retrieving details for player " + e.getPlayer().getName());
-		synchronized(playerlock){
-			playerAcct(e.getPlayer());
-		}
+		playerAcct(e.getPlayer());
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerQuit(PlayerQuitEvent e){
 		MineQuest.log("[Player] Saving details for player " + e.getPlayer().getName());
-		synchronized(playerlock){
-			getPlayerDetails(e.getPlayer()).save();
+		try {
+			PlayerSQL.updatePlayerObject(e.getPlayer().getName(), getPlayerDetails(e.getPlayer()));
+		} catch (SQLException e1) {
+			e1.printStackTrace();
 		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerKick(PlayerKickEvent e){
 		MineQuest.log("[Player] Saving details for player " + e.getPlayer().getName());
-		synchronized(playerlock){
-			getPlayerDetails(e.getPlayer()).save();
+		try {
+			PlayerSQL.updatePlayerObject(e.getPlayer().getName(), getPlayerDetails(e.getPlayer()));
+		} catch (SQLException e1) {
+			e1.printStackTrace();
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onFoodLevelChangeEvent(FoodLevelChangeEvent e){
 		if (!(e.getEntity() instanceof Player))
@@ -166,7 +175,7 @@ public class PlayerManager implements Listener {
 		PlayerDetails d = getPlayerDetails(p);
 		e.setFoodLevel(d.getMinecraftMana(d.getMana()));
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityRegainHealthEvent(EntityRegainHealthEvent e){
 		if (!(e.getEntity() instanceof Player))
@@ -181,9 +190,9 @@ public class PlayerManager implements Listener {
 		int minecraftcurrent = p.getHealth();
 		e.setAmount(minecrafthealth-minecraftcurrent);
 	}
-	
+
 	// Damage START
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent e){
 		if (!(e.getEntity() instanceof Player))
@@ -198,7 +207,7 @@ public class PlayerManager implements Listener {
 		int minecraftcurrent = p.getHealth();
 		e.setDamage(minecraftcurrent-minecrafthealth);
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDamageByBlockEvent(EntityDamageByBlockEvent e){
 		if (!(e.getEntity() instanceof Player))
@@ -213,22 +222,22 @@ public class PlayerManager implements Listener {
 		int minecraftcurrent = p.getHealth();
 		e.setDamage(minecraftcurrent-minecrafthealth);
 	}
-	
+
 	// Damage END
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerExpChangeEvent(PlayerExpChangeEvent e){
 		e.setAmount(0);
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDeath(PlayerDeathEvent e){
 		e.setDroppedExp(0);
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDeath(EntityDeathEvent e){
 		e.setDroppedExp(0);
 	}
-	
+
 }
