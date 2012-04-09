@@ -19,6 +19,7 @@
  **/
 package com.theminequest.MQCoreRPG.Player;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -112,6 +113,8 @@ public class PlayerManager implements Listener {
 				PlayerSQL.updatePlayerObject(d.getPlayer().getName(), d);
 			} catch (SQLException e) {
 				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -125,13 +128,17 @@ public class PlayerManager implements Listener {
 					players.put(p, obj);
 					return;
 				}
-			} catch (SQLException e1) {
-				e1.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 			obj = new PlayerDetails(p);
 			try {
 				PlayerSQL.insertPlayerObject(p.getName(), obj);
 			} catch (SQLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			players.put(p, obj);
@@ -156,6 +163,8 @@ public class PlayerManager implements Listener {
 			PlayerSQL.updatePlayerObject(e.getPlayer().getName(), getPlayerDetails(e.getPlayer()));
 		} catch (SQLException e1) {
 			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 		players.remove(e.getPlayer());
 	}
@@ -166,6 +175,8 @@ public class PlayerManager implements Listener {
 		try {
 			PlayerSQL.updatePlayerObject(e.getPlayer().getName(), getPlayerDetails(e.getPlayer()));
 		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 		players.remove(e.getPlayer());

@@ -182,7 +182,10 @@ public class PlayerDetails implements Serializable {
 		System.out.println(getMinecraftExp(getExperience(),getLevel()));
 		System.out.println(getPlayer());
 		getPlayer().setTotalExperience(getMinecraftExp(getExperience(),getLevel()));
+		System.out.println(getMana());
+		System.out.println(getMinecraftMana(getMana()));
 		getPlayer().setFoodLevel(getMinecraftMana(getMana()));
+		System.out.println(getMinecraftHealth(getHealth()));
 		getPlayer().setHealth(getMinecraftHealth(getHealth()));
 	}
 	
@@ -190,18 +193,18 @@ public class PlayerDetails implements Serializable {
 		// (Math.pow(1.75[Level],2) + 5.00[Level]) + (3.5[Current Level] + 6.7)
 		double curlevel = (Math.pow(1.75*(double)level,2)+(5*(double)level));
 		double exptonext = ((3.5*(double)level)+6.7);
-		double percentageiwant = exp/getMaxExperience();
-		double soihave = exptonext*percentageiwant;
+		double percentageiwant = ((double)exp)/getMaxExperience();
+		double soihave = (double) (exptonext*percentageiwant);
 		return (int) Math.round(curlevel+soihave);
 	}
 	
 	public synchronized int getMinecraftMana(long mana){
-		double percentage = mana/getMaxMana();
+		double percentage = ((double)mana)/getMaxMana();
 		return (int) Math.round((double)20*percentage);
 	}
 	
 	public synchronized int getMinecraftHealth(long health){
-		double percentage = health/getMaxHealth();
+		double percentage = ((double)health)/getMaxHealth();
 		return (int) Math.round((double)20*percentage);
 	}
 	
