@@ -22,30 +22,18 @@ public class PlayerSQL {
 
 	public static void insertPlayerObject(String user, PlayerDetails params) throws SQLException, IOException {
 		DatabaseHandler db = MineQuest.sqlstorage.getDB();
-		CallableStatement statement = db.getConnection().prepareCall(PLAYER_ADD);
+		PreparedStatement statement = db.getConnection().prepareStatement(PLAYER_ADD);
 		statement.setString(1,user);
-		statement.registerOutParameter(2, Types.BLOB);
-
-		Blob blob = statement.getBlob(2);
-		ObjectOutputStream oop = new ObjectOutputStream(blob.setBinaryStream(1));
-		oop.writeObject(params);
-		oop.flush();
-		oop.close();
+		statement.setObject(2, params, java.sql.Types.BLOB);
 		statement.execute();
 		statement.close();
 	}
 
 	public static void updatePlayerObject(String user, PlayerDetails params) throws SQLException, IOException {
 		DatabaseHandler db = MineQuest.sqlstorage.getDB();
-		CallableStatement statement = db.getConnection().prepareCall(PLAYER_UPDATE);
-		statement.registerOutParameter(1, Types.BLOB);
+		PreparedStatement statement = db.getConnection().prepareStatement(PLAYER_UPDATE);
 		statement.setString(2,user);
-
-		Blob blob = statement.getBlob(1);
-		ObjectOutputStream oop = new ObjectOutputStream(blob.setBinaryStream(1));
-		oop.writeObject(params);
-		oop.flush();
-		oop.close();
+		statement.setObject(1, params, java.sql.Types.BLOB);
 		statement.execute();
 		statement.close();
 	}
