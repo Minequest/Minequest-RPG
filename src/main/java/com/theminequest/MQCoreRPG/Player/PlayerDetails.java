@@ -191,8 +191,8 @@ public class PlayerDetails implements Serializable {
 	
 	public synchronized int getMinecraftExp(long exp, int level){
 		// (Math.pow(1.75[Level],2) + 5.00[Level]) + (3.5[Current Level] + 6.7)
-		double curlevel = (Math.pow(1.75*(double)level,2)+(5*(double)level));
-		double exptonext = ((3.5*(double)level)+6.7);
+		double curlevel = (Math.pow(1.75*((double)level),2)+(5*((double)level)));
+		double exptonext = ((3.5*((double)level)+6.7));
 		double percentageiwant = ((double)exp)/getMaxExperience();
 		double soihave = (double) (exptonext*percentageiwant);
 		return (int) Math.round(curlevel+soihave);
