@@ -53,14 +53,14 @@ public class PlayerDetails implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -2315094916617378789L;
-	
+
 	private boolean abilitiesEnabled;
 	// >_>
 	public LinkedHashMap<Ability,Long> abilitiesCoolDown;
 	// end >_>
-	
+
 	protected volatile boolean giveMana;
-	
+
 	// player properties
 	private String name;
 	private long health;
@@ -68,7 +68,7 @@ public class PlayerDetails implements Serializable {
 	private int level;
 	private long exp;
 	private String classid;
-	
+
 	public PlayerDetails(Player p) {
 		name = p.getName();
 		abilitiesEnabled = false;
@@ -81,19 +81,19 @@ public class PlayerDetails implements Serializable {
 		giveMana = true;
 		updateMinecraftView();
 	}
-	
+
 	public Player getPlayer(){
 		return Bukkit.getPlayerExact(name);
 	}
-	
+
 	public synchronized int getLevel(){
 		return level;
 	}
-	
+
 	public synchronized void setLevel(int i) {
 		level = i;
 	}
-	
+
 	public synchronized void levelUp(){
 		level+=1;
 		PlayerLevelEvent event = new PlayerLevelEvent(getPlayer());
@@ -101,43 +101,40 @@ public class PlayerDetails implements Serializable {
 		exp = exp-(MQCoreRPG.classManager.getClassDetail(classid).getBaseExp()*(level-1));
 		if (exp<0)
 			exp = 0;
-		updateMinecraftView();
 	}
-	
+
 	public synchronized long getExperience(){
 		return exp;
 	}
-	
+
 	public synchronized long getMaxExperience(){
 		return MQCoreRPG.classManager.getClassDetail(classid).getBaseExp()*level;
 	}
-	
+
 	public synchronized void modifyExperienceBy(int e){
 		exp+=e;
 		PlayerExperienceEvent event = new PlayerExperienceEvent(getPlayer(), e);
 		Bukkit.getPluginManager().callEvent(event);
 		while (exp>=getMaxExperience())
 			levelUp();
-		updateMinecraftView();
 	}
-	
+
 	public synchronized String getClassID(){
 		return classid;
 	}
-	
+
 	public synchronized void setClassID(String classid){
 		this.classid = classid;
-		updateMinecraftView();
 	}
-	
+
 	public synchronized long getMana(){
 		return mana;
 	}
-	
+
 	public synchronized long getMaxMana(){
 		return MQCoreRPG.classManager.getClassDetail(classid).getBaseMana()*level;
 	}
-	
+
 	public synchronized void modifyManaBy(int m){
 		long manatoadd = m;
 		if (mana==MQCoreRPG.classManager.getClassDetail(classid).getBaseMana()*level)
@@ -149,21 +146,20 @@ public class PlayerDetails implements Serializable {
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isCancelled())
 			mana-=manatoadd;
-		updateMinecraftView();
 	}
-	
+
 	public synchronized long getHealth(){
 		return health;
 	}
-	
+
 	public synchronized long getMaxHealth(){
 		return MQCoreRPG.classManager.getClassDetail(classid).getBaseHealth()*level;
 	}
-	
+
 	public synchronized void setHealth(long l){
 		this.health = l;
 	}
-	
+
 	/*
 	 * A user should be able to toggle ability use on/off
 	 * with a command, like /ability on/off?
@@ -171,45 +167,40 @@ public class PlayerDetails implements Serializable {
 	public synchronized boolean getAbilitiesEnabled(){
 		return abilitiesEnabled;
 	}
-	
+
 	public synchronized void setAbilitiesEnabled(boolean b){
 		abilitiesEnabled = b;
 	}
-	
+
 	public synchronized void updateMinecraftView(){
-		System.out.println(getExperience());
-		System.out.println(getLevel());
-		System.out.println(getMinecraftExp(getExperience(),getLevel()));
-		System.out.println(getPlayer());
-		getPlayer().setTotalExperience(getMinecraftExp(getExperience(),getLevel()));
-		System.out.println(getMana());
-		System.out.println(getMinecraftMana(getMana()));
-		getPlayer().setFoodLevel(getMinecraftMana(getMana()));
-		System.out.println(getMinecraftHealth(getHealth()));
-		getPlayer().setHealth(getMinecraftHealth(getHealth()));
+		if (!getPlayer().isDead()){
+			getPlayer().setExp(getMinecraftExp(getExperience(),getLevel()));
+			getPlayer().setFoodLevel(getMinecraftMana(getMana()));
+			getPlayer().setHealth(getMinecraftHealth(getHealth()));
+		}
 	}
-	
-	public synchronized int getMinecraftExp(long exp, int level){
+
+	public synchronized float getMinecraftExp(long exp, int level){
 		// (Math.pow(1.75[Level],2) + 5.00[Level]) + (3.5[Current Level] + 6.7)
 		double curlevel = (Math.pow(1.75*((double)level),2)+(5*((double)level)));
 		double exptonext = ((3.5*((double)level)+6.7));
 		double percentageiwant = ((double)exp)/getMaxExperience();
 		double soihave = (double) (exptonext*percentageiwant);
-		return (int) Math.round(curlevel+soihave);
+		return Math.round(curlevel+soihave);
 	}
-	
+
 	public synchronized int getMinecraftMana(long mana){
 		double percentage = ((double)mana)/getMaxMana();
 		return (int) Math.round((double)20*percentage);
 	}
-	
+
 	public synchronized int getMinecraftHealth(long health){
 		double percentage = ((double)health)/getMaxHealth();
 		return (int) Math.round((double)20*percentage);
 	}
-	
+
 	protected static void verifyObject(PlayerDetails d){
-		
+
 	}
 
 }

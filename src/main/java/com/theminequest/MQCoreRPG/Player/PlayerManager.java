@@ -101,6 +101,28 @@ public class PlayerManager implements Listener {
 		t.setDaemon(true);
 		t.setName("MineQuest-PlayerMana");
 		t.start();
+		
+		Runnable run = new Runnable() {
+
+			@Override
+			public void run() {
+				while (!shutdown){
+					for (PlayerDetails d : players.values())
+						d.updateMinecraftView();
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						throw new RuntimeException(e);
+					}
+				}
+			}
+			
+		};
+		
+		Thread th = new Thread(run);
+		th.setDaemon(true);
+		th.setName("MineQuest-PlayerUpdateView");
+		th.start();
 	}
 
 	public void shutdown(){
@@ -188,6 +210,7 @@ public class PlayerManager implements Listener {
 			return;
 		Player p = (Player) e.getEntity();
 		PlayerDetails d = getPlayerDetails(p);
+		d.modifyManaBy(e.getFoodLevel()-p.getFoodLevel());
 		e.setFoodLevel(d.getMinecraftMana(d.getMana()));
 	}
 
@@ -204,6 +227,7 @@ public class PlayerManager implements Listener {
 		int minecrafthealth = d.getMinecraftHealth(total);
 		int minecraftcurrent = p.getHealth();
 		e.setAmount(minecrafthealth-minecraftcurrent);
+		d.setHealth(total);
 	}
 
 	// Damage START
@@ -221,6 +245,7 @@ public class PlayerManager implements Listener {
 		int minecrafthealth = d.getMinecraftHealth(total);
 		int minecraftcurrent = p.getHealth();
 		e.setDamage(minecraftcurrent-minecrafthealth);
+		d.setHealth(total);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -236,6 +261,7 @@ public class PlayerManager implements Listener {
 		int minecrafthealth = d.getMinecraftHealth(total);
 		int minecraftcurrent = p.getHealth();
 		e.setDamage(minecraftcurrent-minecrafthealth);
+		d.setHealth(total);
 	}
 
 	// Damage END
@@ -257,7 +283,6 @@ public class PlayerManager implements Listener {
 	public void onPlayerRespawn(PlayerRespawnEvent e){
 		PlayerDetails p = getPlayerDetails(e.getPlayer());
 		p.setHealth(p.getMaxHealth());
-		p.updateMinecraftView();
 		p.giveMana = true;
 	}
 
