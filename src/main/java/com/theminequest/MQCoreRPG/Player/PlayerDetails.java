@@ -174,13 +174,18 @@ public class PlayerDetails implements Serializable {
 
 	public synchronized void updateMinecraftView(){
 		if (!getPlayer().isDead()){
-			getPlayer().setExp(getMinecraftExp(getExperience(),getLevel()));
+			getPlayer().setExp(getMinecraftLevelExp(getExperience(),getLevel()));
+			getPlayer().setLevel(getLevel());
 			getPlayer().setFoodLevel(getMinecraftMana(getMana()));
 			getPlayer().setHealth(getMinecraftHealth(getHealth()));
 		}
 	}
+	
+	public synchronized float getMinecraftLevelExp(long exp, int level){
+		return (float) ((3.5*((double)level))+6.7);
+	}
 
-	public synchronized float getMinecraftExp(long exp, int level){
+	public synchronized float getMinecraftTotalExp(long exp, int level){
 		// (Math.pow(1.75[Level],2) + 5.00[Level]) + (3.5[Current Level] + 6.7)
 		double curlevel = (Math.pow(1.75*((double)level),2)+(5*((double)level)));
 		double exptonext = ((3.5*((double)level)+6.7));
