@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -55,13 +56,11 @@ public class PlayerManager implements Listener {
 
 	private Map<Player,PlayerDetails> players;
 	private volatile boolean shutdown;
-	private volatile boolean chill;
 
 	public PlayerManager(){
 		MineQuest.log("[Player] Starting Manager...");
 		players = Collections.synchronizedMap(new LinkedHashMap<Player,PlayerDetails>());
 		shutdown = false;
-		chill = false;
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(MineQuest.activePlugin, new Runnable(){
 
@@ -79,13 +78,9 @@ public class PlayerManager implements Listener {
 			public void run() {
 				Random r = new Random();
 				while (!shutdown){
-					if (!chill){
-						chill = true;
-						for (PlayerDetails d : players.values()){
-							if (d.giveMana)
-								d.modifyPowerBy(1);
-						}
-						chill = false;
+					for (PlayerDetails d : players.values()){
+						if (d.giveMana)
+							d.modifyPowerBy(1);
 					}
 					try {
 						Thread.sleep(r.nextInt(10000)+5000);
@@ -101,14 +96,20 @@ public class PlayerManager implements Listener {
 		t.setDaemon(true);
 		t.setName("MineQuest-PlayerMana");
 		t.start();
-		
+
 		Runnable run = new Runnable() {
 
 			@Override
 			public void run() {
 				while (!shutdown){
-					for (PlayerDetails d : players.values())
-						d.updateMinecraftView();
+					for (PlayerDetails d : players.values()){
+						try {
+							d.updateMinecraftView();
+						} catch (NullPointerException e){
+							MineQuest.log(Level.WARNING, "[Player] Thread NPE! Can't keep up! Did the system time change, or is the server overloaded?");
+							MineQuest.log(Level.WARNING, "[Player] Message: " + e.toString());
+						}
+					}
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
@@ -116,9 +117,9 @@ public class PlayerManager implements Listener {
 					}
 				}
 			}
-			
+
 		};
-		
+
 		Thread th = new Thread(run);
 		th.setDaemon(true);
 		th.setName("MineQuest-PlayerUpdateView");
@@ -278,7 +279,7 @@ public class PlayerManager implements Listener {
 		p.setHealth(0);
 		p.giveMana = false;
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerRespawn(PlayerRespawnEvent e){
 		PlayerDetails p = getPlayerDetails(e.getPlayer());
