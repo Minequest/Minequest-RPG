@@ -110,7 +110,7 @@ public class PlayerManager implements Listener {
 					for (PlayerDetails d : players.values())
 						d.updateMinecraftView();
 					try {
-						Thread.sleep(100);
+						Thread.sleep(50);
 					} catch (InterruptedException e) {
 						throw new RuntimeException(e);
 					}
