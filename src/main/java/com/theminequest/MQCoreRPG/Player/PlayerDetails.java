@@ -26,20 +26,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.theminequest.MQCoreRPG.MQCoreRPG;
 import com.theminequest.MQCoreRPG.API.Abilities.Ability;
+import com.theminequest.MQCoreRPG.BukkitEvents.PlayerExperienceEvent;
+import com.theminequest.MQCoreRPG.BukkitEvents.PlayerLevelEvent;
+import com.theminequest.MQCoreRPG.BukkitEvents.PlayerPowerEvent;
 import com.theminequest.MQCoreRPG.Class.ClassDetails;
 import com.theminequest.MineQuest.MineQuest;
 import com.theminequest.MineQuest.Quest.Quest;
 import com.theminequest.MineQuest.Utils.PropertiesFile;
 import com.theminequest.MineQuest.Backend.GroupBackend;
-import com.theminequest.MineQuest.BukkitEvents.PlayerExperienceEvent;
-import com.theminequest.MineQuest.BukkitEvents.PlayerLevelEvent;
-import com.theminequest.MineQuest.BukkitEvents.PlayerManaEvent;
 
 /**
  * Extra details about the Player
@@ -56,7 +57,7 @@ public class PlayerDetails implements Serializable {
 
 	private boolean abilitiesEnabled;
 	// >_>
-	public LinkedHashMap<Ability,Long> abilitiesCoolDown;
+	public Map<Ability,Long> abilitiesCoolDown;
 	// end >_>
 
 	protected volatile boolean giveMana;
@@ -64,7 +65,7 @@ public class PlayerDetails implements Serializable {
 	// player properties
 	private String name;
 	private long health;
-	private long mana;
+	private long power;
 	private int level;
 	private long exp;
 	private String classid;
@@ -72,12 +73,12 @@ public class PlayerDetails implements Serializable {
 	public PlayerDetails(Player p) {
 		name = p.getName();
 		abilitiesEnabled = false;
-		abilitiesCoolDown = new LinkedHashMap<Ability,Long>();
+		abilitiesCoolDown = Collections.synchronizedMap(new LinkedHashMap<Ability,Long>());
 		classid = "default";
 		level = 1;
 		exp = 0;
 		health = getMaxHealth();
-		mana = Math.round(getMaxMana()*0.75);
+		power = Math.round(getMaxPower()*0.75);
 		giveMana = true;
 		updateMinecraftView();
 	}
@@ -127,25 +128,25 @@ public class PlayerDetails implements Serializable {
 		this.classid = classid;
 	}
 
-	public synchronized long getMana(){
-		return mana;
+	public synchronized long getPower(){
+		return power;
 	}
 
-	public synchronized long getMaxMana(){
-		return MQCoreRPG.classManager.getClassDetail(classid).getBaseMana()*level;
+	public synchronized long getMaxPower(){
+		return MQCoreRPG.classManager.getClassDetail(classid).getBasePower()*level;
 	}
 
-	public synchronized void modifyManaBy(int m){
-		long manatoadd = m;
-		if (mana==MQCoreRPG.classManager.getClassDetail(classid).getBaseMana()*level)
+	public synchronized void modifyPowerBy(int m){
+		long powertoadd = m;
+		if (power==MQCoreRPG.classManager.getClassDetail(classid).getBasePower()*level)
 			return;
-		else if (m+mana>(getMaxMana()))
-			manatoadd = (getMaxMana())-(m+mana);
-		mana+=manatoadd;
-		PlayerManaEvent event = new PlayerManaEvent(getPlayer(),m);
+		else if (m+power>(getMaxPower()))
+			powertoadd = (getMaxPower())-(m+power);
+		power+=powertoadd;
+		PlayerPowerEvent event = new PlayerPowerEvent(getPlayer(),m);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isCancelled())
-			mana-=manatoadd;
+			power-=powertoadd;
 	}
 
 	public synchronized long getHealth(){
@@ -176,13 +177,13 @@ public class PlayerDetails implements Serializable {
 		if (!getPlayer().isDead()){
 			getPlayer().setExp(getMinecraftLevelExp(getExperience(),getLevel()));
 			getPlayer().setLevel(getLevel());
-			getPlayer().setFoodLevel(getMinecraftMana(getMana()));
+			getPlayer().setFoodLevel(getMinecraftFood(getPower()));
 			getPlayer().setHealth(getMinecraftHealth(getHealth()));
 		}
 	}
 	
 	public synchronized float getMinecraftLevelExp(long exp, int level){
-		return (float) ((3.5*((double)level))+6.7);
+		return ((float)getExperience()/getMaxExperience());
 	}
 
 	public synchronized float getMinecraftTotalExp(long exp, int level){
@@ -194,8 +195,8 @@ public class PlayerDetails implements Serializable {
 		return Math.round(curlevel+soihave);
 	}
 
-	public synchronized int getMinecraftMana(long mana){
-		double percentage = ((double)mana)/getMaxMana();
+	public synchronized int getMinecraftFood(long power){
+		double percentage = ((double)power)/getMaxPower();
 		return (int) Math.round((double)20*percentage);
 	}
 

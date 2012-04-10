@@ -11,12 +11,12 @@ public class ClassDetails {
 	
 	public static final int BASE_HEALTH = 100;
 	public static final int BASE_EXP = 100;
-	public static final int BASE_MANA = 100;
+	public static final int BASE_POWER = 100;
 	
 	private String name;
 	private String displayname;
 	private List<String> abilities;
-	private int basemanaby;
+	private int basepowerby;
 	private int baseexpby;
 	private int basehealthby;
 	
@@ -24,7 +24,7 @@ public class ClassDetails {
 		name = "default";
 		displayname = "Regular Person";
 		abilities = new ArrayList<String>();
-		basemanaby = 0;
+		basepowerby = 0;
 		baseexpby = 0;
 		basehealthby = 0;
 	}
@@ -34,7 +34,7 @@ public class ClassDetails {
 		name = f.getName().substring(0, f.getName().indexOf(".cspec"));
 		displayname = y.getString("displayname", name);
 		abilities = y.getStringList("abilities");
-		basemanaby = y.getInt("manadifference", 0);
+		basepowerby = y.getInt("powerdifference", 0);
 		baseexpby = y.getInt("expdifference", 0);
 		basehealthby = y.getInt("basehealthby",0);
 	}
@@ -59,8 +59,8 @@ public class ClassDetails {
 		return BASE_EXP + baseexpby;
 	}
 	
-	public int getBaseMana(){
-		return BASE_MANA + basemanaby;
+	public int getBasePower(){
+		return BASE_POWER + basepowerby;
 	}
 	
 	public int getBaseHealth(){

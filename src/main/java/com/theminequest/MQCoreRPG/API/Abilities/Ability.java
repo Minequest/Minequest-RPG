@@ -135,7 +135,7 @@ public abstract class Ability {
 			} else
 				return true;
 			if (details.getAbilitiesEnabled() && questAllow(p)){
-				details.modifyManaBy(-1*getMana());
+				details.modifyPowerBy(-1*getMana());
 				executeEvent(e,result);
 				details.abilitiesCoolDown.put(this, System.currentTimeMillis()*1000);
 				p.sendMessage(ChatColor.GRAY + "Used ability " + getName() + ".");

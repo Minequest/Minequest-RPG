@@ -83,7 +83,7 @@ public class PlayerManager implements Listener {
 						chill = true;
 						for (PlayerDetails d : players.values()){
 							if (d.giveMana)
-								d.modifyManaBy(1);
+								d.modifyPowerBy(1);
 						}
 						chill = false;
 					}
@@ -210,8 +210,8 @@ public class PlayerManager implements Listener {
 			return;
 		Player p = (Player) e.getEntity();
 		PlayerDetails d = getPlayerDetails(p);
-		d.modifyManaBy(e.getFoodLevel()-p.getFoodLevel());
-		e.setFoodLevel(d.getMinecraftMana(d.getMana()));
+		d.modifyPowerBy(e.getFoodLevel()-p.getFoodLevel());
+		e.setFoodLevel(d.getMinecraftFood(d.getPower()));
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
