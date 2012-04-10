@@ -57,7 +57,7 @@ public class RewardExpEvent extends QEvent {
 		long gid = MineQuest.groupManager.indexOfQuest(MineQuest.questManager.getQuest(getQuestId()));
 		Group g = MineQuest.groupManager.getGroup(gid);
 		for (Player p : g.getPlayers())
-			MQCoreRPG.playerManager.getPlayerDetails(p).modifyExperienceBy(exptogive);
+			MQCoreRPG.playerManager.getPlayerDetails(p).modifyExperienceBy(exptogive/g.getPlayers().size());
 		return CompleteStatus.SUCCESS;
 	}
 

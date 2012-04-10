@@ -151,7 +151,7 @@ public class PlayerCommandFrontend extends CommandFrontend {
 		messages.add(ChatColor.AQUA + "Level: " + ChatColor.WHITE + details.getLevel());
 		if (p.equals(lookup) || !(c instanceof Player)){
 			messages.add(ChatColor.AQUA + "Exp: " + ChatColor.WHITE + details.getExperience() + "/" + (details.getMaxExperience()));
-			messages.add(ChatColor.AQUA + "Mana: " + ChatColor.WHITE + details.getPower() + "/" + (details.getMaxPower()));
+			messages.add(ChatColor.AQUA + "Power: " + ChatColor.WHITE + details.getPower() + "/" + (details.getMaxPower()));
 		}
 		
 		for (String s: messages){
