@@ -35,6 +35,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
@@ -251,6 +252,22 @@ public class PlayerManager implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDamageByBlockEvent(EntityDamageByBlockEvent e){
+		if (!(e.getEntity() instanceof Player))
+			return;
+		Player p = (Player) e.getEntity();
+		PlayerDetails d = getPlayerDetails(p);
+		int amount = e.getDamage();
+		long total = d.getHealth()-amount;
+		if (total<0)
+			total = 0;
+		int minecrafthealth = d.getMinecraftHealth(total);
+		int minecraftcurrent = p.getHealth();
+		e.setDamage(minecraftcurrent-minecrafthealth);
+		d.setHealth(total);
+	}
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onEntityDamageEvent(EntityDamageEvent e){
 		if (!(e.getEntity() instanceof Player))
 			return;
 		Player p = (Player) e.getEntity();
