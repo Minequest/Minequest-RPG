@@ -6,6 +6,7 @@ import com.theminequest.MQCoreRPG.API.Abilities.AbilityManager;
 import com.theminequest.MQCoreRPG.Class.ClassManager;
 import com.theminequest.MQCoreRPG.Commands.PlayerCommandFrontend;
 import com.theminequest.MQCoreRPG.Player.PlayerManager;
+import com.theminequest.MQCoreRPG.QEvents.RewardExpEvent;
 import com.theminequest.MineQuest.MineQuest;
 
 public class MQCoreRPG extends JavaPlugin {
@@ -24,6 +25,7 @@ public class MQCoreRPG extends JavaPlugin {
 		classManager = new ClassManager();
 		getServer().getPluginManager().registerEvents(classManager, this);
 		getCommand("player").setExecutor(new PlayerCommandFrontend());
+		MineQuest.eventManager.registerEvent("RewardExpEvent", RewardExpEvent.class);
 	}
 
 	@Override
