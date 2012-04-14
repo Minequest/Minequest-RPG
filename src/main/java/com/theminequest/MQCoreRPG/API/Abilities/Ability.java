@@ -48,17 +48,17 @@ public abstract class Ability {
 	public abstract String getName();
 
 	/**
-	 * How much mana (or endurance) this ability uses.<br>
-	 * Remember that the mana of a person is (base mana)*level.
-	 * @return % of total mana of a level 1 person (0-100) should be taken
+	 * How much power (or endurance) this ability uses.<br>
+	 * Remember that the power of a person is (base power)*level.
+	 * @return % of total power of a level 1 person (0-100) should be taken
 	 */
-	public abstract int getMana();
+	public abstract float getPower();
 	
 	/**
 	 * Cooldown time after using this ability, in seconds.
 	 * @return cooldown time in seconds.
 	 */
-	public abstract int getCooldown();
+	public abstract long getCooldown();
 	
 	/**
 	 * Abilities are listeners for all events. When an event
@@ -75,16 +75,18 @@ public abstract class Ability {
 	 * {@link org.bukkit.event.player.PlayerInteractEntityEvent},
 	 * and {@link org.bukkit.event.player.PlayerInteractEvent}.
 	 * @param e Event caught.
-	 * @return string with details for execution,
-	 * (or {@link null} for wrong event/something wrong).
+	 * @return true if this is the event we want to use.
 	 */
-	public abstract String isRightEvent(PlayerEvent e);
+	public abstract boolean isRightEvent(PlayerEvent e);
 	
 	/**
-	 * Execute the event given the parameters.
-	 * @param details Execution details
+	 * Execute the event given the parameters. This time
+	 * you can do casting without checking, as the event
+	 * should have been checked earlier.<br>
+	 * @param p The player. Useful if you need details such as level.
+	 * @param e The event passed in earlier
 	 */
-	public abstract void executeEvent(PlayerEvent e, String details);
+	public abstract void executeEvent(Player p, PlayerEvent e);
 	
 	/**
 	 * Quests can disallow certain abilities.
@@ -98,7 +100,7 @@ public abstract class Ability {
 			return true;
 		Group g = MineQuest.groupManager.getGroup(teamid);
 		// outside the quest, of course you can use abilities
-		if (g.getQuest()==null)
+		if (!g.isInQuest())
 			return true;
 		// inside the quest...
 		List<String> abilities = g.getQuest().getDisallowedAbilities();
@@ -109,50 +111,63 @@ public abstract class Ability {
 		return true;
 	}
 	
-	protected boolean onEventCaught(PlayerEvent e){
-		String result = isRightEvent(e);
-		if (result!=null){
-			final Player p = e.getPlayer();
-			PlayerDetails details = MQCoreRPG.playerManager.getPlayerDetails(p);
-			if (details.abilitiesCoolDown.containsKey(this)){
-				long currentseconds = System.currentTimeMillis()*1000;
-				long timeelapsed = currentseconds-details.abilitiesCoolDown.get(this);
-				if (timeelapsed<getCooldown()){
-					p.sendMessage(ChatColor.YELLOW+"Ability " + getName() + " is recharging... "
-							+ ChatColor.GRAY + "(" +(getCooldown()-timeelapsed)+ " s)");
-					return true;
-				}
+	private boolean checkCoolDown(Player pl, PlayerDetails p){
+		if (p.abilitiesCoolDown.containsKey(getName())){
+			long currentseconds = System.currentTimeMillis()*1000;
+			long timeelapsed = currentseconds-p.abilitiesCoolDown.get(this);
+			if (timeelapsed<getCooldown()){
+				pl.sendMessage(ChatColor.YELLOW+"Ability " + getName() + " is recharging... "
+						+ ChatColor.GRAY + "(" +(getCooldown()-timeelapsed)+ " s)");
+				return false;
 			}
-			/*
-			 * FIXME
-			 */
-			if (details.getClassID()!=null){
-				ClassDetails d = MQCoreRPG.classManager.getClassDetail(details.getClassID());
-				if (d==null)
-					return true;
-				if (!d.hasAbility(this.getName()))
-					return true;
-			} else
-				return true;
-			if (details.getAbilitiesEnabled() && questAllow(p)){
-				details.modifyPowerBy(-1*getMana());
-				executeEvent(e,result);
-				details.abilitiesCoolDown.put(this, System.currentTimeMillis()*1000);
-				p.sendMessage(ChatColor.GRAY + "Used ability " + getName() + ".");
-				final Ability a = this;
-				Bukkit.getScheduler().scheduleAsyncDelayedTask(MineQuest.activePlugin,
-						new Runnable(){
-
-							@Override
-							public void run() {
-								Bukkit.getPluginManager().callEvent(new AbilityRefreshedEvent(a,p));
-							}
-					
-				}, 20*getCooldown());
-				return true;
-			}
+			p.abilitiesCoolDown.remove(getName());
+			return true;
 		}
-		return false;
+		return true;
+	}
+	
+	private boolean checkEnabled(PlayerDetails p){
+		return p.getAbilitiesEnabled();
+	}
+	
+	private boolean checkClassAbilities(PlayerDetails p){
+		ClassDetails d = MQCoreRPG.classManager.getClassDetail(p.getClassID());
+		if (d==null)
+			return false;
+		List<String> list = d.getAbilities();
+		return (list.contains(getName()));
+	}
+	
+	protected boolean onEventCaught(PlayerEvent e){
+		if (!isRightEvent(e))
+			return false;
+		final Player player = e.getPlayer();
+		PlayerDetails pd = MQCoreRPG.playerManager.getPlayerDetails(player);
+		if (!checkEnabled(pd))
+			return false;
+		if (!checkCoolDown(player,pd))
+			return false;
+		if (!checkClassAbilities(pd))
+			return false;
+		if (!questAllow(player))
+			return false;
+		
+		pd.modifyPowerBy((-1*(int)(pd.getPower()*getPower())));
+		executeEvent(player, e);
+		pd.abilitiesCoolDown.put(this, System.currentTimeMillis()*1000);
+		player.sendMessage(ChatColor.GRAY + "Used ability " + getName() + ".");
+		final Ability a = this;
+		Bukkit.getScheduler().scheduleAsyncDelayedTask(MineQuest.activePlugin,
+				new Runnable(){
+
+					@Override
+					public void run() {
+						Bukkit.getPluginManager().callEvent(new AbilityRefreshedEvent(a,player));
+					}
+			
+		}, 20*getCooldown());
+		return true;
+
 	}
 	
 }
