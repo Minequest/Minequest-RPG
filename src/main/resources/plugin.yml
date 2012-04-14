@@ -18,8 +18,16 @@ commands:
       description: Player Command for MineQuest
       usage: /<command>
       permission: minequest.rpg
+   stop:
+      aliases: [mqstop]
+      description: Stop the server by kicking everyone first.
+      usage: /<command>
+      permission: minequest.stop
 
 permissions:
   minequest.rpg:
     description: Allows RPG commands
     default: true
+  minequest.stop:
+    description: Stop the server
+    default: op
