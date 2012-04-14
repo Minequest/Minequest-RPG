@@ -49,10 +49,13 @@ public abstract class Ability {
 
 	/**
 	 * How much power (or endurance) this ability uses.<br>
-	 * Remember that the power of a person is (base power)*level.
-	 * @return % of total power of a level 1 person (0-100) should be taken
+	 * Remember that the power of a person is (base power)*level.<br>
+	 * If you want to adjust how much power is used (e.g, always deplete
+	 * entire power), you can retrieve the player's level by accessing
+	 * the details that are passed in.
+	 * @return total power to remove from Player.
 	 */
-	public abstract float getPower();
+	public abstract int getPower(PlayerDetails d);
 	
 	/**
 	 * Cooldown time after using this ability, in seconds.
@@ -152,7 +155,7 @@ public abstract class Ability {
 		if (!questAllow(player))
 			return false;
 		
-		pd.modifyPowerBy((-1*(int)(pd.getPower()*getPower())));
+		pd.modifyPowerBy(-1*getPower(pd));
 		executeEvent(player, e);
 		pd.abilitiesCoolDown.put(this, System.currentTimeMillis()*1000);
 		player.sendMessage(ChatColor.GRAY + "Used ability " + getName() + ".");
