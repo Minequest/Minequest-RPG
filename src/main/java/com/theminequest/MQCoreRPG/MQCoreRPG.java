@@ -2,6 +2,7 @@ package com.theminequest.MQCoreRPG;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.theminequest.MQCoreRPG.API.Abilities.AbilityHandler;
 import com.theminequest.MQCoreRPG.API.Abilities.AbilityManager;
 import com.theminequest.MQCoreRPG.Class.ClassManager;
 import com.theminequest.MQCoreRPG.Commands.PlayerCommandFrontend;
@@ -26,6 +27,7 @@ public class MQCoreRPG extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(classManager, this);
 		getCommand("player").setExecutor(new PlayerCommandFrontend());
 		MineQuest.eventManager.registerEvent("RewardExpEvent", RewardExpEvent.class);
+		MineQuest.questManager.parser.addClassHandler("bannedabilities", AbilityHandler.class);
 	}
 
 	@Override
