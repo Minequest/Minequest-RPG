@@ -1,5 +1,7 @@
 package com.theminequest.MQCoreRPG;
 
+import java.io.File;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.theminequest.MQCoreRPG.API.Abilities.AbilityHandler;
@@ -10,16 +12,19 @@ import com.theminequest.MQCoreRPG.Commands.StopExecutor;
 import com.theminequest.MQCoreRPG.Player.PlayerManager;
 import com.theminequest.MQCoreRPG.QEvents.RewardExpEvent;
 import com.theminequest.MineQuest.MineQuest;
+import com.theminequest.MineQuest.Utils.PropertiesFile;
 
 public class MQCoreRPG extends JavaPlugin {
 	
 	public static PlayerManager playerManager = null;
 	public static AbilityManager abilityManager = null;
 	public static ClassManager classManager = null;
+	public static PropertiesFile configuration = null;
 	
 	@Override
 	public void onEnable(){
 		MineQuest.log("[RPG] Starting RPG addon...");
+		configuration = new PropertiesFile(MineQuest.activePlugin.getDataFolder()+File.separator+"rpg.properties");
 		playerManager = new PlayerManager();
 		getServer().getPluginManager().registerEvents(playerManager, this);
 		abilityManager = new AbilityManager();
@@ -38,6 +43,7 @@ public class MQCoreRPG extends JavaPlugin {
 		playerManager = null;
 		abilityManager = null;
 		classManager = null;
+		configuration = null;
 	}
 
 }
