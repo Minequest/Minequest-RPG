@@ -25,8 +25,10 @@ public class PlayerCommandFrontend extends CommandFrontend {
 	// TODO Implement localization fully.
 	
 	public Boolean clear(Player p, String[] args){
-		if (p!=null)
-			return false;
+		if (p!=null){
+			if (!p.isOp())
+				return false;
+		}
 		
 		ConsoleCommandSender c = Bukkit.getConsoleSender();
 		
@@ -49,8 +51,10 @@ public class PlayerCommandFrontend extends CommandFrontend {
 	}
 	
 	public Boolean setlevel(Player p, String[] args){
-		if (p!=null)
-			return false;
+		if (p!=null){
+			if (!p.isOp())
+				return false;
+		}
 		
 		ConsoleCommandSender c = Bukkit.getConsoleSender();
 		
@@ -72,8 +76,10 @@ public class PlayerCommandFrontend extends CommandFrontend {
 	}
 	
 	public Boolean giveexp(Player p, String[] args){
-		if (p!=null)
-			return false;
+		if (p!=null){
+			if (!p.isOp())
+				return false;
+		}
 		
 		ConsoleCommandSender c = Bukkit.getConsoleSender();
 		
@@ -95,8 +101,10 @@ public class PlayerCommandFrontend extends CommandFrontend {
 	}
 	
 	public Boolean levelup(Player p, String[] args){
-		if (p!=null)
-			return false;
+		if (p!=null){
+			if (!p.isOp())
+				return false;
+		}
 		
 		ConsoleCommandSender c = Bukkit.getConsoleSender();
 		
@@ -165,7 +173,7 @@ public class PlayerCommandFrontend extends CommandFrontend {
 		List<String> messages = new ArrayList<String>();
 		
 		// CONSOLE COMMANDS
-		if (p==null){
+		if (p==null || p.isOp()){
 			messages.add(ChatUtils.formatHeader(localization.getChatString("player_help_CONSOLE","Console Commands")));
 			messages.add(ChatUtils.formatHelp("player clear [name]",localization.getChatString("player_help_clear","Clear a user's stats.")));
 			messages.add(ChatUtils.formatHelp("player giveexp [name] [amt]", localization.getChatString("player_help_giveexp", "Give player exp.")));
