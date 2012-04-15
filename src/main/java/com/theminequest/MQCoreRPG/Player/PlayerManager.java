@@ -81,7 +81,7 @@ public class PlayerManager implements Listener {
 				while (!shutdown){
 					for (PlayerDetails d : players.values()){
 						if (d.giveMana)
-							d.modifyPowerBy(1);
+							d.modifyPowerBy(1*d.getLevel());
 					}
 					try {
 						Thread.sleep(r.nextInt(10000)+5000);
