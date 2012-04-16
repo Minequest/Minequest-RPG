@@ -93,6 +93,8 @@ public class PlayerDetails implements Serializable {
 
 	public synchronized void setLevel(int i) {
 		level = i;
+		PlayerLevelEvent event = new PlayerLevelEvent(getPlayer());
+		Bukkit.getPluginManager().callEvent(event);
 	}
 
 	public synchronized void levelUp(){
