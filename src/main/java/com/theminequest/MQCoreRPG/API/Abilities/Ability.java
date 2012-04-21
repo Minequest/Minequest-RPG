@@ -106,7 +106,7 @@ public abstract class Ability {
 		if (!g.isInQuest())
 			return true;
 		// inside the quest...
-		String abilities = (String) g.getQuest().database.get("bannedabilities");
+		String abilities = (String) g.getQuest().details.database.get("bannedabilities");
 		if (abilities==null)
 			return true;
 		for (String s : abilities.split(",")){

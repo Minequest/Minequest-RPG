@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
+import static org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.theminequest.MQCoreRPG.MQCoreRPG;
 import com.theminequest.MineQuest.Utils.PropertiesFile;
@@ -27,6 +28,7 @@ public class ClassDetails {
 	private int baseexpby;
 	private int basehealthby;
 	private Map<String,Integer> experience;
+	private Map<String,Double> damagecost;
 	
 	protected ClassDetails(){
 		name = "default";
@@ -36,8 +38,12 @@ public class ClassDetails {
 		baseexpby = 0;
 		basehealthby = 0;
 		experience = new LinkedHashMap<String,Integer>();
+		damagecost = new LinkedHashMap<String,Double>();
 		for (EntityType e : EntityType.values()){
 			experience.put(e.getName(), MQCoreRPG.configuration.getInt("EXP_def_drop_"+e.getName(), 10));
+		}
+		for (DamageCause d : DamageCause.values()){
+			damagecost.put(d.name(), MQCoreRPG.configuration.getDouble("DMG_def_"+d.name(),10));
 		}
 	}
 	
@@ -59,6 +65,12 @@ public class ClassDetails {
 			if (p.containsKey("EXP_drop_" + e.getName())){
 				experience.remove(e.getName());
 				experience.put(e.getName(), p.getInt("EXP_drop_"+e.getName()));
+			}
+		}
+		for (DamageCause d : DamageCause.values()){
+			if (p.containsKey("DMG_"+d.name())){
+				damagecost.remove(d.name());
+				damagecost.put(d.name(), p.getDouble("DMG_"+d.name()));
 			}
 		}
 	}
@@ -93,6 +105,10 @@ public class ClassDetails {
 	
 	public int getExperienceFromEntityDeath(EntityType e){
 		return experience.get(e.getName());
+	}
+	
+	public double getDamageFromCause(DamageCause d){
+		return damagecost.get(d.name());
 	}
 
 }

@@ -174,14 +174,15 @@ public class PlayerCommandFrontend extends CommandFrontend {
 		
 		// CONSOLE COMMANDS
 		if (p==null || p.isOp()){
-			messages.add(ChatUtils.formatHeader(localization.getChatString("player_help_CONSOLE","Console Commands")));
-			messages.add(ChatUtils.formatHelp("player clear [name]",localization.getChatString("player_help_clear","Clear a user's stats.")));
-			messages.add(ChatUtils.formatHelp("player giveexp [name] [amt]", localization.getChatString("player_help_giveexp", "Give player exp.")));
-			messages.add(ChatUtils.formatHelp("player levelup [name]", localization.getChatString("player_help_levelup","Level up player by 1.")));
-			messages.add(ChatUtils.formatHelp("player setlevel [name] [lvl]", localization.getChatString("player_help_setlevel", "Set player level.")));
+			messages.add(ChatUtils.formatHeader("Op Commands"));
+			messages.add(ChatUtils.formatHelp("player clear [name]","Clear a user's statistics completely."));
+			messages.add(ChatUtils.formatHelp("player giveexp [name] [amt]", "Give a player EXP."));
+			messages.add(ChatUtils.formatHelp("player levelup [name]", "Level up a player by 1."));
+			messages.add(ChatUtils.formatHelp("player setlevel [name] [lvl]", "Set the level of a player."));
 		}
-		messages.add(ChatUtils.formatHeader(localization.getChatString("player_help","Player Commands")));
-		messages.add(ChatUtils.formatHelp("player info <name>", localization.getChatString("player_help_info","Get player info (omit name for your own).")));		
+		messages.add(ChatUtils.formatHeader("Player Commands"));
+		messages.add(ChatUtils.formatHelp("player info", "Retrieve your information."));
+		messages.add(ChatUtils.formatHelp("player info <name>", "Retrieve Player Information."));		
 		if (p==null){
 			CommandSender c = Bukkit.getConsoleSender();
 			for (String s : messages){

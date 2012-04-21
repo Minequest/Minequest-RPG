@@ -3,6 +3,7 @@ package com.theminequest.MQCoreRPG.API.Abilities;
 import java.util.List;
 
 import com.theminequest.MineQuest.Quest.Quest;
+import com.theminequest.MineQuest.Quest.QuestDescription;
 import com.theminequest.MineQuest.Quest.QuestParser;
 
 public class AbilityHandler implements QuestParser.QHandler {
@@ -13,7 +14,7 @@ public class AbilityHandler implements QuestParser.QHandler {
 	 * "ability,ability,ability,ability"
 	 */
 	@Override
-	public void parseDetails(Quest q, List<String> line) {
+	public void parseDetails(QuestDescription q, List<String> line) {
 		q.database.put("bannedabilities", line.get(0));
 	}
 
