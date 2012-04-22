@@ -108,7 +108,6 @@ public class PlayerManager implements Listener {
 							d.updateMinecraftView();
 						} catch (NullPointerException e){
 							MineQuest.log(Level.WARNING, "[Player] Thread NPE! Can't keep up! Did the system time change, or is the server overloaded?");
-							MineQuest.log(Level.WARNING, "[Player] Message: " + e.toString());
 						}
 					}
 					try {
