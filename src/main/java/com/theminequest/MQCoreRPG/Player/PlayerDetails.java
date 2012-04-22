@@ -188,27 +188,14 @@ public class PlayerDetails implements Serializable {
 		return ((float)getExperience()/getMaxExperience());
 	}
 
-	public synchronized float getMinecraftTotalExp(long exp, int level){
-		// (Math.pow(1.75[Level],2) + 5.00[Level]) + (3.5[Current Level] + 6.7)
-		double curlevel = (Math.pow(1.75*((double)level),2)+(5*((double)level)));
-		double exptonext = ((3.5*((double)level)+6.7));
-		double percentageiwant = ((double)exp)/getMaxExperience();
-		double soihave = (double) (exptonext*percentageiwant);
-		return Math.round(curlevel+soihave);
-	}
-
 	public synchronized int getMinecraftFood(long power){
 		double percentage = ((double)power)/getMaxPower();
-		return (int) Math.round((double)20*percentage);
+		return (int) Math.floor((double)20*percentage);
 	}
 
 	public synchronized int getMinecraftHealth(long health){
 		double percentage = ((double)health)/getMaxHealth();
-		return (int) Math.round((double)20*percentage);
-	}
-
-	protected static void verifyObject(PlayerDetails d){
-
+		return (int) Math.floor((double)20*percentage);
 	}
 
 }
