@@ -32,7 +32,7 @@ public class ClassDetails {
 	
 	protected ClassDetails(){
 		name = "default";
-		displayname = "Regular People Class";
+		displayname = "Regular Person";
 		abilities = new ArrayList<String>();
 		basepowerby = 0;
 		baseexpby = 0;
