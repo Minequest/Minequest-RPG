@@ -135,22 +135,22 @@ public class HUDManager implements Listener {
 		cont.setLayout(ContainerType.HORIZONTAL);
 		cont.setPriority(RenderPriority.Highest);
 		
-		GenericLabel h = new GenericLabel();
+		GenericLabel h = (GenericLabel) new GenericLabel().setResize(true).setFixed(true);
 		health.put(player, h);
 		cont.addChild(h);
 		
 		// How about power level?
-		GenericLabel p = new GenericLabel();
+		GenericLabel p = (GenericLabel) new GenericLabel().setResize(true).setFixed(true);
 		power.put(player, p);
 		cont.addChild(p);
 		
 		// Class and Level
-		GenericLabel l = new GenericLabel();
+		GenericLabel l = (GenericLabel) new GenericLabel().setResize(true).setFixed(true);
 		lvlclass.put(player,l);
 		cont.addChild(l);
 		
 		// and finally, EXP
-		GenericLabel e = new GenericLabel();
+		GenericLabel e = (GenericLabel) new GenericLabel().setResize(true).setFixed(true);
 		exp.put(player, e);
 		cont.addChild(e);
 
