@@ -9,8 +9,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.getspout.spoutapi.event.spout.SpoutCraftEnableEvent;
+import org.getspout.spoutapi.gui.ContainerType;
 import org.getspout.spoutapi.gui.GenericContainer;
 import org.getspout.spoutapi.gui.GenericLabel;
+import org.getspout.spoutapi.gui.RenderPriority;
 import org.getspout.spoutapi.gui.Widget;
 import org.getspout.spoutapi.gui.WidgetAnchor;
 import org.getspout.spoutapi.player.SpoutPlayer;
@@ -43,10 +45,10 @@ public class HUDManager implements Listener {
 	
 	@EventHandler
 	public void onPlayerHealth(PlayerHealthEvent e){
-		upPlayerHealthWidget((SpoutPlayer)e.getPlayer());
+		upPlayerHealthWidget(e.getPlayer());
 	}
 	
-	private void upPlayerHealthWidget(SpoutPlayer p){
+	private void upPlayerHealthWidget(Player p){
 		PlayerDetails d = MQCoreRPG.playerManager.getPlayerDetails(p);
 		GenericLabel hl = health.get(p);
 		long h = d.getHealth();
@@ -65,10 +67,10 @@ public class HUDManager implements Listener {
 	
 	@EventHandler
 	public void onPlayerLevel(PlayerLevelEvent e){
-		upPlayerLevelWidget((SpoutPlayer)e.getPlayer());
+		upPlayerLevelWidget(e.getPlayer());
 	}
 
-	private void upPlayerLevelWidget(SpoutPlayer p){
+	private void upPlayerLevelWidget(Player p){
 		PlayerDetails d = MQCoreRPG.playerManager.getPlayerDetails(p);
 		GenericLabel ll = lvlclass.get(p);
 		int level = d.getLevel();
@@ -80,10 +82,10 @@ public class HUDManager implements Listener {
 	
 	@EventHandler
 	public void onPlayerPower(PlayerPowerEvent e){
-		upPlayerPowerWidget((SpoutPlayer) e.getPlayer());
+		upPlayerPowerWidget(e.getPlayer());
 	}
 	
-	private void upPlayerPowerWidget(SpoutPlayer p){
+	private void upPlayerPowerWidget(Player p){
 		PlayerDetails d = MQCoreRPG.playerManager.getPlayerDetails(p);
 		GenericLabel pla = power.get(p);
 		long pl = d.getPower();
@@ -102,10 +104,10 @@ public class HUDManager implements Listener {
 	
 	@EventHandler
 	public void onPlayerExperience(PlayerExperienceEvent e){
-		upPlayerExperienceWidget((SpoutPlayer) e.getPlayer());
+		upPlayerExperienceWidget(e.getPlayer());
 	}
 	
-	private void upPlayerExperienceWidget(SpoutPlayer p){
+	private void upPlayerExperienceWidget(Player p){
 		PlayerDetails d = MQCoreRPG.playerManager.getPlayerDetails(p);
 		GenericLabel e = exp.get(p);
 		long ex = d.getExperience();
@@ -118,17 +120,20 @@ public class HUDManager implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent e){
 		if (!((SpoutPlayer)e.getPlayer()).isSpoutCraftEnabled())
 			return;
-		createAndSetWidget((SpoutPlayer) e.getPlayer());
-		upPlayerHealthWidget((SpoutPlayer) e.getPlayer());
-		upPlayerPowerWidget((SpoutPlayer) e.getPlayer());
-		upPlayerLevelWidget((SpoutPlayer) e.getPlayer());
-		upPlayerExperienceWidget((SpoutPlayer) e.getPlayer());
+		createAndSetWidget(e.getPlayer());
+		upPlayerHealthWidget(e.getPlayer());
+		upPlayerPowerWidget(e.getPlayer());
+		upPlayerLevelWidget(e.getPlayer());
+		upPlayerExperienceWidget(e.getPlayer());
 	}
 	
-	private void createAndSetWidget(SpoutPlayer player){
+	private void createAndSetWidget(Player player){
 		// Let's contain everything in this.
 		GenericContainer cont = new GenericContainer();
-		cont.setAlign(WidgetAnchor.TOP_CENTER).setAnchor(WidgetAnchor.BOTTOM_RIGHT);
+		cont.setAlign(WidgetAnchor.TOP_RIGHT).setAnchor(WidgetAnchor.BOTTOM_RIGHT);
+		cont.setDirty(true);
+		cont.setLayout(ContainerType.HORIZONTAL);
+		cont.setPriority(RenderPriority.Highest);
 		
 		GenericLabel h = new GenericLabel();
 		health.put(player, h);
@@ -149,7 +154,7 @@ public class HUDManager implements Listener {
 		exp.put(player, e);
 		cont.addChild(e);
 
-		player.getMainScreen().attachWidget(MQCoreRPG.activePlugin, cont);
+		((SpoutPlayer)player).getMainScreen().attachWidget(MQCoreRPG.activePlugin, cont);
 		container.put(player, cont);
 	}
 
