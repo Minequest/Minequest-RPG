@@ -38,9 +38,9 @@ public class MQCoreRPG extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(classManager, this);
 		try {
 			getServer().getPluginManager().registerEvents(new TitleManager(), this);
-			getServer().getPluginManager().registerEvents(new HUDManager(), this);
+			//getServer().getPluginManager().registerEvents(new HUDManager(), this);
 		} catch (ClassNotFoundException e) {
-			MineQuest.log(Level.WARNING, "[Title/HUD] Unable to start managers; No SpoutPlugin found.");
+			MineQuest.log(Level.WARNING, "[Title] Unable to start managers; No SpoutPlugin found.");
 		}
 		getCommand("player").setExecutor(new PlayerCommandFrontend());
 		getCommand("stop").setExecutor(new StopExecutor());
