@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.EntityEffect;
 import org.bukkit.entity.Player;
 
 import com.theminequest.MQCoreRPG.MQCoreRPG;
@@ -161,9 +162,14 @@ public class PlayerDetails implements Serializable {
 	}
 
 	public synchronized void setHealth(long l){
+		boolean hurt = false;
+		if (l<this.health)
+			hurt = true;
 		this.health = l;
 		PlayerHealthEvent e = new PlayerHealthEvent(getPlayer());
 		Bukkit.getPluginManager().callEvent(e);
+		if (hurt)
+			getPlayer().playEffect(EntityEffect.HURT);
 	}
 
 	/*
