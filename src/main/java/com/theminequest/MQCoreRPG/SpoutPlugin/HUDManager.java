@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.getspout.spoutapi.event.spout.SpoutCraftEnableEvent;
 import org.getspout.spoutapi.gui.GenericContainer;
 import org.getspout.spoutapi.gui.GenericLabel;
@@ -114,12 +115,14 @@ public class HUDManager implements Listener {
 	}
 	
 	@EventHandler
-	public void onSCPlayer(SpoutCraftEnableEvent e){
-		createAndSetWidget(e.getPlayer());
-		upPlayerHealthWidget(e.getPlayer());
-		upPlayerPowerWidget(e.getPlayer());
-		upPlayerLevelWidget(e.getPlayer());
-		upPlayerExperienceWidget(e.getPlayer());
+	public void onPlayerJoin(PlayerJoinEvent e){
+		if (!((SpoutPlayer)e.getPlayer()).isSpoutCraftEnabled())
+			return;
+		createAndSetWidget((SpoutPlayer) e.getPlayer());
+		upPlayerHealthWidget((SpoutPlayer) e.getPlayer());
+		upPlayerPowerWidget((SpoutPlayer) e.getPlayer());
+		upPlayerLevelWidget((SpoutPlayer) e.getPlayer());
+		upPlayerExperienceWidget((SpoutPlayer) e.getPlayer());
 	}
 	
 	private void createAndSetWidget(SpoutPlayer player){
