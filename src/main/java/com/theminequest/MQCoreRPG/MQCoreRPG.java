@@ -12,6 +12,7 @@ import com.theminequest.MQCoreRPG.Commands.PlayerCommandFrontend;
 import com.theminequest.MQCoreRPG.Commands.StopExecutor;
 import com.theminequest.MQCoreRPG.Player.PlayerManager;
 import com.theminequest.MQCoreRPG.QEvents.RewardExpEvent;
+import com.theminequest.MQCoreRPG.SpoutPlugin.PopupManager;
 import com.theminequest.MQCoreRPG.SpoutPlugin.HUDManager;
 import com.theminequest.MQCoreRPG.SpoutPlugin.TitleManager;
 import com.theminequest.MineQuest.MineQuest;
@@ -24,6 +25,8 @@ public class MQCoreRPG extends JavaPlugin {
 	public static AbilityManager abilityManager = null;
 	public static ClassManager classManager = null;
 	public static PropertiesFile configuration = null;
+	
+	public static PopupManager popupManager = null;
 	
 	@Override
 	public void onEnable(){
@@ -39,8 +42,10 @@ public class MQCoreRPG extends JavaPlugin {
 		try {
 			getServer().getPluginManager().registerEvents(new TitleManager(), this);
 			//getServer().getPluginManager().registerEvents(new HUDManager(), this);
+			popupManager = new PopupManager();
+			getServer().getPluginManager().registerEvents(popupManager, this);
 		} catch (ClassNotFoundException e) {
-			MineQuest.log(Level.WARNING, "[Title] Unable to start managers; No SpoutPlugin found.");
+			MineQuest.log(Level.WARNING, "[Title/Popup] Unable to start managers; No SpoutPlugin found.");
 		}
 		getCommand("player").setExecutor(new PlayerCommandFrontend());
 		getCommand("stop").setExecutor(new StopExecutor());

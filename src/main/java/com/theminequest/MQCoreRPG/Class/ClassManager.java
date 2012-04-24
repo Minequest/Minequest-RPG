@@ -8,8 +8,16 @@ import java.util.logging.Level;
 
 import javax.swing.filechooser.FileFilter;
 
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
+import com.theminequest.MQCoreRPG.MQCoreRPG;
+import com.theminequest.MQCoreRPG.Player.PlayerDetails;
 import com.theminequest.MineQuest.MineQuest;
 
 public class ClassManager implements Listener {
@@ -54,4 +62,31 @@ public class ClassManager implements Listener {
 		}
 	}
 	
+	// FIXME
+	@EventHandler
+	public void onPlayerDeath(PlayerDeathEvent e){
+		double amt = Math.random();
+		if (amt>0.25)
+			amt = 0.25;
+		PlayerDetails d = MQCoreRPG.playerManager.getPlayerDetails(e.getEntity());
+		int rmexp = (int) Math.round(d.getExperience()*amt);
+		if (MQCoreRPG.popupManager!=null)
+			MQCoreRPG.popupManager.triggerNotificationPopup(e.getEntity(), e.getDeathMessage() + ". Lost " + rmexp + " exp.");
+		d.modifyExperienceBy(-1*rmexp);
+	}
+	
+	// FIXME
+	@EventHandler
+	public void onEntityDamageByEntity(EntityDamageByEntityEvent e){
+		if (!(e.getDamager() instanceof Player) || !(e.getEntity() instanceof LivingEntity))
+			return;
+		if (((LivingEntity)e.getEntity()).getHealth()-e.getDamage()>0)
+			return;
+		double amt = Math.random();
+		PlayerDetails d = MQCoreRPG.playerManager.getPlayerDetails((Player) e.getDamager());
+		int addexp = (int) Math.round(50*amt);
+		if (MQCoreRPG.popupManager!=null)
+			MQCoreRPG.popupManager.triggerNotificationPopup((Player) e.getEntity(), "Defeated " + e.getEntityType().getName() + "! Gained " + addexp + " exp.");
+		d.modifyExperienceBy(addexp);
+	}
 }

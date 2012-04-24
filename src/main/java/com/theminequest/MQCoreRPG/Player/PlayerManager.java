@@ -57,6 +57,7 @@ public class PlayerManager implements Listener {
 
 	private Map<Player,PlayerDetails> players;
 	private volatile boolean shutdown;
+	public static final int MAX_LEVEL = 50;
 
 	public PlayerManager(){
 		MineQuest.log("[Player] Starting Manager...");
