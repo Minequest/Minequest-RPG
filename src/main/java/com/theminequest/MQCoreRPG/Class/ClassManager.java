@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
@@ -71,22 +72,23 @@ public class ClassManager implements Listener {
 		PlayerDetails d = MQCoreRPG.playerManager.getPlayerDetails(e.getEntity());
 		int rmexp = (int) Math.round(d.getExperience()*amt);
 		if (MQCoreRPG.popupManager!=null)
-			MQCoreRPG.popupManager.triggerNotificationPopup(e.getEntity(), e.getDeathMessage() + ". Lost " + rmexp + " exp.");
+			MQCoreRPG.popupManager.triggerNotificationPopup(e.getEntity(), e.getDeathMessage() + "\nLost " + rmexp + " exp.");
 		d.modifyExperienceBy(-1*rmexp);
 	}
 	
 	// FIXME
 	@EventHandler
-	public void onEntityDamageByEntity(EntityDamageByEntityEvent e){
-		if (!(e.getDamager() instanceof Player) || !(e.getEntity() instanceof LivingEntity))
-			return;
-		if (((LivingEntity)e.getEntity()).getHealth()-e.getDamage()>0)
+	public void onEntityDeathEvent(EntityDeathEvent e){
+		EntityDamageEvent cause = e.getEntity().getLastDamageCause();
+		if (!(cause.getEntity() instanceof Player))
 			return;
 		double amt = Math.random();
-		PlayerDetails d = MQCoreRPG.playerManager.getPlayerDetails((Player) e.getDamager());
+		PlayerDetails d = MQCoreRPG.playerManager.getPlayerDetails((Player) cause.getEntity());
 		int addexp = (int) Math.round(50*amt);
-		if (MQCoreRPG.popupManager!=null)
-			MQCoreRPG.popupManager.triggerNotificationPopup((Player) e.getEntity(), "Defeated " + e.getEntityType().getName() + "! Gained " + addexp + " exp.");
+		if (MQCoreRPG.popupManager!=null){
+			MQCoreRPG.popupManager.triggerExpPopup((Player) cause.getEntity(), addexp);
+			MQCoreRPG.popupManager.triggerNotificationPopup((Player) cause.getEntity(), "Defeated " + e.getEntityType().getName() + "!\nGained " + addexp + " exp.");
+		}
 		d.modifyExperienceBy(addexp);
 	}
 }
