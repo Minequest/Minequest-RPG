@@ -79,15 +79,16 @@ public class ClassManager implements Listener {
 	// FIXME
 	@EventHandler
 	public void onEntityDeathEvent(EntityDeathEvent e){
-		EntityDamageEvent cause = e.getEntity().getLastDamageCause();
-		if (!(cause.getEntity() instanceof Player))
+		EntityDamageEvent c = e.getEntity().getLastDamageCause();
+		if (!(c instanceof EntityDamageByEntityEvent))
 			return;
+		EntityDamageByEntityEvent cause = (EntityDamageByEntityEvent) c;
 		double amt = Math.random();
-		PlayerDetails d = MQCoreRPG.playerManager.getPlayerDetails((Player) cause.getEntity());
+		PlayerDetails d = MQCoreRPG.playerManager.getPlayerDetails((Player) cause.getDamager());
 		int addexp = (int) Math.round(50*amt);
 		if (MQCoreRPG.popupManager!=null){
-			MQCoreRPG.popupManager.triggerExpPopup((Player) cause.getEntity(), addexp);
-			MQCoreRPG.popupManager.triggerNotificationPopup((Player) cause.getEntity(), "Defeated " + e.getEntityType().getName() + "!\nGained " + addexp + " exp.");
+			MQCoreRPG.popupManager.triggerExpPopup((Player) cause.getDamager(), addexp);
+			MQCoreRPG.popupManager.triggerNotificationPopup((Player) cause.getDamager(), "Defeated " + e.getEntityType().getName() + "!\nGained " + addexp + " exp.");
 		}
 		d.modifyExperienceBy(addexp);
 	}
