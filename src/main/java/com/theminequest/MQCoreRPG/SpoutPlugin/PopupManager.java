@@ -22,7 +22,7 @@ public class PopupManager implements Listener {
 	
 	public void triggerNotificationPopup(Player player, String message){
 		final SpoutPlayer sp = SpoutManager.getPlayer(player);
-		final Widget text = new GenericLabel(message).setTextColor(new Color(192,192,192)).setHeight(10).setWidth(20).setAnchor(WidgetAnchor.BOTTOM_LEFT).shiftXPos(-5).shiftYPos(-10).animate(WidgetAnim.POS_Y, -1F, (short)20, (short)1, false, false).animateStart();
+		final Widget text = new GenericLabel(message).setTextColor(new Color(192,192,192)).setHeight(10).setWidth(20).setAnchor(WidgetAnchor.BOTTOM_LEFT).shiftYPos(-10).animate(WidgetAnim.POS_Y, -1F, (short)20, (short)1, false, false).animateStart();
 		sp.getMainScreen().attachWidget(MQCoreRPG.activePlugin,text);
 		
 		MQCoreRPG.activePlugin.getServer().getScheduler().scheduleSyncDelayedTask(MQCoreRPG.activePlugin, new Runnable() {
@@ -35,7 +35,7 @@ public class PopupManager implements Listener {
 	/*
 	 * Borrowed from RpgEssentials :<
 	 */
-	public void triggerExpPopup(Player player, double addexp){
+	public void triggerExpPopup(Player player, int addexp){
 		final SpoutPlayer splayer = SpoutManager.getPlayer(player);
 		final Widget exp = new GenericLabel("+" + addexp + " exp").setTextColor(new Color(1.0F, 1.0F, 0, 1.0F)).setHeight(10).setWidth(20).setAnchor(WidgetAnchor.CENTER_CENTER).shiftXPos(-5).shiftYPos(-10).animate(WidgetAnim.POS_Y, -1F, (short)20, (short)1, false, false).animateStart();
 		splayer.getMainScreen().attachWidget(MQCoreRPG.activePlugin, exp);
