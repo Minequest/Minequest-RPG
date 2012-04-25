@@ -22,7 +22,7 @@ public class PopupManager implements Listener {
 	
 	public void triggerNotificationPopup(Player player, String message){
 		final SpoutPlayer sp = SpoutManager.getPlayer(player);
-		final Widget text = new GenericLabel(message).setTextColor(new Color(192,192,192)).setHeight(10).setWidth(20).setAnchor(WidgetAnchor.BOTTOM_RIGHT).shiftXPos(-5).shiftYPos(-10).animate(WidgetAnim.POS_Y, -1F, (short)20, (short)1, false, false).animateStart();
+		final Widget text = new GenericLabel(message).setTextColor(new Color(192,192,192)).setHeight(10).setWidth(20).setAnchor(WidgetAnchor.BOTTOM_LEFT).shiftXPos(-5).shiftYPos(-10).animate(WidgetAnim.POS_Y, -1F, (short)20, (short)1, false, false).animateStart();
 		sp.getMainScreen().attachWidget(MQCoreRPG.activePlugin,text);
 		
 		MQCoreRPG.activePlugin.getServer().getScheduler().scheduleSyncDelayedTask(MQCoreRPG.activePlugin, new Runnable() {
