@@ -30,7 +30,11 @@ public class PlayerCommandFrontend extends CommandFrontend {
 				return false;
 		}
 		
-		ConsoleCommandSender c = Bukkit.getConsoleSender();
+		CommandSender c;
+		if (p==null)
+			c = Bukkit.getConsoleSender();
+		else
+			c = p;
 		
 		if (args.length!=1){
 			c.sendMessage("Invalid number of arguments.");
@@ -56,7 +60,11 @@ public class PlayerCommandFrontend extends CommandFrontend {
 				return false;
 		}
 		
-		ConsoleCommandSender c = Bukkit.getConsoleSender();
+		CommandSender c;
+		if (p==null)
+			c = Bukkit.getConsoleSender();
+		else
+			c = p;
 		
 		if (args.length!=2){
 			c.sendMessage("Invalid number of arguments.");
@@ -81,7 +89,11 @@ public class PlayerCommandFrontend extends CommandFrontend {
 				return false;
 		}
 		
-		ConsoleCommandSender c = Bukkit.getConsoleSender();
+		CommandSender c;
+		if (p==null)
+			c = Bukkit.getConsoleSender();
+		else
+			c = p;
 		
 		if (args.length!=2){
 			c.sendMessage("Invalid number of arguments.");
@@ -106,7 +118,11 @@ public class PlayerCommandFrontend extends CommandFrontend {
 				return false;
 		}
 		
-		ConsoleCommandSender c = Bukkit.getConsoleSender();
+		CommandSender c;
+		if (p==null)
+			c = Bukkit.getConsoleSender();
+		else
+			c = p;
 		
 		if (args.length!=1){
 			c.sendMessage("Invalid number of arguments.");
@@ -123,6 +139,36 @@ public class PlayerCommandFrontend extends CommandFrontend {
 		details.levelUp();
 		c.sendMessage("Leveled.");
 		return true;
+	}
+	
+	public Boolean heal(Player p, String[] args){
+		if (p!=null){
+			if (!p.isOp())
+				return false;
+		}
+		
+		CommandSender c;
+		if (p==null)
+			c = Bukkit.getConsoleSender();
+		else
+			c = p;
+		
+		if (args.length>1){
+			c.sendMessage("Invalid number of arguments.");
+			return false;
+		}
+		
+		Player player = Bukkit.getPlayerExact(args[0]);
+		if (player==null){
+			c.sendMessage("No such player. :(");
+			return false;
+		}
+		
+		PlayerDetails details = MQCoreRPG.playerManager.getPlayerDetails(player);
+		details.setHealth(details.getMaxHealth());
+		c.sendMessage("Healed.");
+		return true;
+		
 	}
 	
 	public Boolean info(Player p, String[] args) {
@@ -177,6 +223,7 @@ public class PlayerCommandFrontend extends CommandFrontend {
 			messages.add(ChatUtils.formatHeader("Op Commands"));
 			messages.add(ChatUtils.formatHelp("player clear [name]","Clear a user's statistics completely."));
 			messages.add(ChatUtils.formatHelp("player giveexp [name] [amt]", "Give a player EXP."));
+			messages.add(ChatUtils.formatHelp("player heal [name]", "Heal a player."));
 			messages.add(ChatUtils.formatHelp("player levelup [name]", "Level up a player by 1."));
 			messages.add(ChatUtils.formatHelp("player setlevel [name] [lvl]", "Set the level of a player."));
 		}
