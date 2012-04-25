@@ -36,6 +36,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
@@ -236,38 +237,20 @@ public class PlayerManager implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent e){
-		if (!(e.getEntity() instanceof Player))
-			return;
-		Player p = (Player) e.getEntity();
-		PlayerDetails d = getPlayerDetails(p);
-		int amount = e.getDamage();
-		long total = d.getHealth()-amount;
-		if (total<0)
-			total = 0;
-		int minecrafthealth = d.getMinecraftHealth(total);
-		int minecraftcurrent = p.getHealth();
-		e.setDamage(minecraftcurrent-minecrafthealth);
-		d.setHealth(total);
+		damageEvents(e);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDamageByBlockEvent(EntityDamageByBlockEvent e){
-		if (!(e.getEntity() instanceof Player))
-			return;
-		Player p = (Player) e.getEntity();
-		PlayerDetails d = getPlayerDetails(p);
-		int amount = e.getDamage();
-		long total = d.getHealth()-amount;
-		if (total<0)
-			total = 0;
-		int minecrafthealth = d.getMinecraftHealth(total);
-		int minecraftcurrent = p.getHealth();
-		e.setDamage(minecraftcurrent-minecrafthealth);
-		d.setHealth(total);
+		damageEvents(e);
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDamageEvent(EntityDamageEvent e){
+		damageEvents(e);
+	}
+	
+	private void damageEvents(EntityDamageEvent e){
 		if (!(e.getEntity() instanceof Player))
 			return;
 		Player p = (Player) e.getEntity();
@@ -279,7 +262,17 @@ public class PlayerManager implements Listener {
 		int minecrafthealth = d.getMinecraftHealth(total);
 		int minecraftcurrent = p.getHealth();
 		e.setDamage(minecraftcurrent-minecrafthealth);
-		d.setHealth(total);
+		switch (e.getCause()){
+		case FIRE:
+		case CONTACT:
+		case LAVA:
+		case VOID:
+			d.setHealth(total, false);
+			break;
+		default:
+			d.setHealth(total);
+			break;
+		}
 	}
 
 	// Damage END

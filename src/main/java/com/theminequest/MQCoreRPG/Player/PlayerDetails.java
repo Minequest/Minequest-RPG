@@ -160,15 +160,19 @@ public class PlayerDetails implements Serializable {
 	public synchronized long getMaxHealth(){
 		return MQCoreRPG.classManager.getClassDetail(classid).getBaseHealth()*level;
 	}
-
+	
 	public synchronized void setHealth(long l){
+		setHealth(l,true);
+	}
+
+	public synchronized void setHealth(long l, boolean effect){
 		boolean hurt = false;
 		if (l<this.health)
 			hurt = true;
 		this.health = l;
 		PlayerHealthEvent e = new PlayerHealthEvent(getPlayer());
 		Bukkit.getPluginManager().callEvent(e);
-		if (hurt)
+		if (effect && hurt)
 			getPlayer().playEffect(EntityEffect.HURT);
 	}
 

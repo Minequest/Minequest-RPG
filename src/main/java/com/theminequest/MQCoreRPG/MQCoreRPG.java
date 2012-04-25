@@ -55,6 +55,7 @@ public class MQCoreRPG extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		popupManager = null;
 		playerManager.saveAll();
 		playerManager.shutdown();
 		playerManager = null;
