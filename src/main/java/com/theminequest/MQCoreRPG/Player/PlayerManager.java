@@ -33,6 +33,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -279,11 +280,15 @@ public class PlayerManager implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerExpChangeEvent(PlayerExpChangeEvent e){
-		if (e.getAmount()<0){
-			PlayerDetails p = getPlayerDetails(e.getPlayer());
-			p.modifyPowerBy((int) Math.round(p.getMaxPower()*Math.random()));
-		}
 		e.setAmount(0);
+	}
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerEnchant(EnchantItemEvent e){
+		PlayerDetails p = getPlayerDetails(e.getEnchanter());
+		int level = e.getExpLevelCost();
+		p.modifyPowerBy((int) Math.round(-1*level*100*Math.random()));
+		e.setExpLevelCost(0);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
