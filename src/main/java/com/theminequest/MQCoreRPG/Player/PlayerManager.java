@@ -279,6 +279,10 @@ public class PlayerManager implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerExpChangeEvent(PlayerExpChangeEvent e){
+		if (e.getAmount()<0){
+			PlayerDetails p = getPlayerDetails(e.getPlayer());
+			p.modifyPowerBy((int) Math.round(p.getMaxPower()*Math.random()));
+		}
 		e.setAmount(0);
 	}
 
