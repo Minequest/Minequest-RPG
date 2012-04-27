@@ -45,11 +45,10 @@ public class HUDManager implements Listener {
 	
 	@EventHandler
 	public void onPlayerHealth(PlayerHealthEvent e){
-		upPlayerHealthWidget(e.getPlayer());
+		upPlayerHealthWidget(e.getPlayer(), e.getDetails());
 	}
 	
-	private void upPlayerHealthWidget(Player p){
-		PlayerDetails d = MQCoreRPG.playerManager.getPlayerDetails(p);
+	private void upPlayerHealthWidget(Player p, PlayerDetails d){
 		GenericLabel hl = health.get(p);
 		long h = d.getHealth();
 		long mh = MQCoreRPG.classManager.getClassDetail(d.getClassID()).getBaseHealth()*d.getLevel();
@@ -119,7 +118,7 @@ public class HUDManager implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e){
 		createAndSetWidget(e.getPlayer());
-		upPlayerHealthWidget(e.getPlayer());
+		upPlayerHealthWidget(e.getPlayer(),MQCoreRPG.playerManager.getPlayerDetails(e.getPlayer()));
 		upPlayerPowerWidget(e.getPlayer());
 		upPlayerLevelWidget(e.getPlayer());
 		upPlayerExperienceWidget(e.getPlayer());

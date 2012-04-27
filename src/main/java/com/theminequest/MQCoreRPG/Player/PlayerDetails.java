@@ -170,7 +170,7 @@ public class PlayerDetails implements Serializable {
 		if (l<this.health)
 			hurt = true;
 		this.health = l;
-		PlayerHealthEvent e = new PlayerHealthEvent(getPlayer());
+		PlayerHealthEvent e = new PlayerHealthEvent(getPlayer(),this);
 		Bukkit.getPluginManager().callEvent(e);
 		if (effect && hurt)
 			getPlayer().playEffect(EntityEffect.HURT);

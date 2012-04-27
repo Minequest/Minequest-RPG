@@ -84,6 +84,8 @@ public class ClassManager implements Listener {
 			return;
 		EntityDamageByEntityEvent cause = (EntityDamageByEntityEvent) c;
 		double amt = Math.random();
+		if (!(cause.getDamager() instanceof Player))
+			return;
 		PlayerDetails d = MQCoreRPG.playerManager.getPlayerDetails((Player) cause.getDamager());
 		int addexp = (int) Math.round(50*amt);
 		if (MQCoreRPG.popupManager!=null){
