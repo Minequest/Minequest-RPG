@@ -13,7 +13,6 @@ import com.theminequest.MQCoreRPG.Commands.StopExecutor;
 import com.theminequest.MQCoreRPG.Player.PlayerManager;
 import com.theminequest.MQCoreRPG.QEvents.RewardExpEvent;
 import com.theminequest.MQCoreRPG.SpoutPlugin.PopupManager;
-import com.theminequest.MQCoreRPG.SpoutPlugin.HUDManager;
 import com.theminequest.MQCoreRPG.SpoutPlugin.TitleManager;
 import com.theminequest.MineQuest.MineQuest;
 import com.theminequest.MineQuest.Utils.PropertiesFile;
@@ -41,7 +40,6 @@ public class MQCoreRPG extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(classManager, this);
 		try {
 			getServer().getPluginManager().registerEvents(new TitleManager(), this);
-			getServer().getPluginManager().registerEvents(new HUDManager(), this);
 			popupManager = new PopupManager();
 			getServer().getPluginManager().registerEvents(popupManager, this);
 		} catch (ClassNotFoundException e) {
