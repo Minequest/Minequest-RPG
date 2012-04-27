@@ -226,6 +226,15 @@ public class PlayerManager implements Listener {
 		PlayerDetails d = getPlayerDetails(p);
 		int amount = e.getAmount();
 		long total = d.getHealth()+amount;
+		switch(e.getRegainReason()){
+		case EATING:
+		case MAGIC:
+		case MAGIC_REGEN:
+		case REGEN:
+		case SATIATED:
+			total = d.getHealth()+(amount*d.getLevel());
+			break;
+		}
 		if (total>d.getMaxHealth())
 			total = d.getMaxHealth();
 		int minecrafthealth = d.getMinecraftHealth(total);
