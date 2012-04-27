@@ -41,7 +41,7 @@ public class MQCoreRPG extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(classManager, this);
 		try {
 			getServer().getPluginManager().registerEvents(new TitleManager(), this);
-			//getServer().getPluginManager().registerEvents(new HUDManager(), this);
+			getServer().getPluginManager().registerEvents(new HUDManager(), this);
 			popupManager = new PopupManager();
 			getServer().getPluginManager().registerEvents(popupManager, this);
 		} catch (ClassNotFoundException e) {

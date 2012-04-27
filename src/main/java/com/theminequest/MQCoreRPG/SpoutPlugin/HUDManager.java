@@ -118,8 +118,6 @@ public class HUDManager implements Listener {
 	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e){
-		if (!((SpoutPlayer)e.getPlayer()).isSpoutCraftEnabled())
-			return;
 		createAndSetWidget(e.getPlayer());
 		upPlayerHealthWidget(e.getPlayer());
 		upPlayerPowerWidget(e.getPlayer());
@@ -128,9 +126,13 @@ public class HUDManager implements Listener {
 	}
 	
 	private void createAndSetWidget(Player player){
+		SpoutPlayer sp = (SpoutPlayer)player;
+		
 		// Let's contain everything in this.
 		GenericContainer cont = new GenericContainer();
-		cont.setAlign(WidgetAnchor.TOP_RIGHT).setAnchor(WidgetAnchor.BOTTOM_RIGHT);
+		int shift = sp.getMainScreen().getHealthBar().getY();
+		int bottom = sp.getMainScreen().getHeight();
+		cont.setAlign(WidgetAnchor.CENTER_CENTER).setAnchor(WidgetAnchor.BOTTOM_CENTER).shiftYPos(-1*((bottom-shift)+20));
 		cont.setDirty(true);
 		cont.setLayout(ContainerType.HORIZONTAL);
 		cont.setPriority(RenderPriority.Highest);
@@ -154,7 +156,7 @@ public class HUDManager implements Listener {
 		exp.put(player, e);
 		cont.addChild(e);
 
-		((SpoutPlayer)player).getMainScreen().attachWidget(MQCoreRPG.activePlugin, cont);
+		sp.getMainScreen().attachWidget(MQCoreRPG.activePlugin, cont);
 		container.put(player, cont);
 	}
 
