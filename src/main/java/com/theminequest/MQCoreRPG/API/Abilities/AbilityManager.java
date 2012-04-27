@@ -44,9 +44,12 @@ public class AbilityManager implements Listener {
 	public AbilityManager(){
 		MineQuest.log("[Ability] Starting Manager...");
 		abilities = new HashMap<String,Ability>();
+		MineQuest.questManager.parser.addClassHandler("bannedabilities", AbilityHandler.class);
 	}
 	
 	public void registerAbility(Ability a){
+		if (abilities.containsKey(a))
+			throw new IllegalArgumentException("Ability exists!");
 		MineQuest.log("[Ability] Registered " + a.getName());
 		abilities.put(a.getName(), a);
 	}
