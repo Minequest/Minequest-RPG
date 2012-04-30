@@ -50,6 +50,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import com.theminequest.MQCoreRPG.MQCoreRPG;
+import com.theminequest.MQCoreRPG.BukkitEvents.PlayerRegisterEvent;
 import com.theminequest.MineQuest.MineQuest;
 import com.theminequest.MineQuest.BukkitEvents.QuestAvailableEvent;
 import com.theminequest.MineQuest.BukkitEvents.QuestCompleteEvent;
@@ -168,6 +169,8 @@ public class PlayerManager implements Listener {
 				e.printStackTrace();
 			}
 			players.put(p, obj);
+			PlayerRegisterEvent e = new PlayerRegisterEvent(p);
+			Bukkit.getPluginManager().callEvent(e);
 		}
 	}
 

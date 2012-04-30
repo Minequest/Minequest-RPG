@@ -34,6 +34,7 @@ import org.bukkit.entity.Player;
 
 import com.theminequest.MQCoreRPG.MQCoreRPG;
 import com.theminequest.MQCoreRPG.API.Abilities.Ability;
+import com.theminequest.MQCoreRPG.BukkitEvents.PlayerClassEvent;
 import com.theminequest.MQCoreRPG.BukkitEvents.PlayerExperienceEvent;
 import com.theminequest.MQCoreRPG.BukkitEvents.PlayerHealthEvent;
 import com.theminequest.MQCoreRPG.BukkitEvents.PlayerLevelEvent;
@@ -130,6 +131,8 @@ public class PlayerDetails implements Serializable {
 
 	public synchronized void setClassID(String classid){
 		this.classid = classid;
+		PlayerClassEvent e = new PlayerClassEvent(getPlayer());
+		Bukkit.getPluginManager().callEvent(e);
 	}
 
 	public synchronized long getPower(){

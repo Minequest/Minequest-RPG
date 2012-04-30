@@ -30,7 +30,9 @@ public class ClassManager implements Listener {
 		MineQuest.log("[Class] Starting Manager...");
 		classes = new LinkedHashMap<String,ClassDetails>();
 		initialize();
-		classes.put("default", new ClassDetails());
+		ClassDetails def = new ClassDetails();
+		def.saveDefault();
+		classes.put("default", def);
 	}
 	
 	public boolean hasClassDetail(String name){

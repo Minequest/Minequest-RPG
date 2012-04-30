@@ -75,6 +75,22 @@ public class ClassDetails {
 		}
 	}
 	
+	protected void saveDefault(){
+		PropertiesFile p = new PropertiesFile(ClassManager.loc + File.separator + "defaultcspec");
+		p.setString("displayname", name);
+		p.setString("abilities","ability1,ability2,ability3");
+		p.setInt("powerdiff",0);
+		p.setInt("expdiff",0);
+		p.setInt("healthdiff",0);
+		for (EntityType e : EntityType.values()){
+			p.setInt("EXP_drop_"+e.getName(),experience.get(e.getName()));
+		}
+		for (DamageCause d : DamageCause.values()){
+			p.setDouble("DMG_"+d.name(),damagecost.get(d.name()));
+		}
+		p.save();
+	}
+	
 	public boolean hasAbility(String name){
 		return abilities.contains(name);
 	}
