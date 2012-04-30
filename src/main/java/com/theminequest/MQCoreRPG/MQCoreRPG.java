@@ -11,6 +11,7 @@ import com.theminequest.MQCoreRPG.Class.ClassManager;
 import com.theminequest.MQCoreRPG.Commands.PlayerCommandFrontend;
 import com.theminequest.MQCoreRPG.Commands.StopExecutor;
 import com.theminequest.MQCoreRPG.Player.PlayerManager;
+import com.theminequest.MQCoreRPG.QEvents.AssignClassEvent;
 import com.theminequest.MQCoreRPG.QEvents.RewardExpEvent;
 import com.theminequest.MQCoreRPG.SpoutPlugin.PopupManager;
 import com.theminequest.MQCoreRPG.SpoutPlugin.TitleManager;
@@ -48,6 +49,7 @@ public class MQCoreRPG extends JavaPlugin {
 		getCommand("player").setExecutor(new PlayerCommandFrontend());
 		getCommand("stop").setExecutor(new StopExecutor());
 		MineQuest.eventManager.registerEvent("RewardExpEvent", RewardExpEvent.class);
+		MineQuest.eventManager.registerEvent("AssignClassEvent", AssignClassEvent.class);
 		MineQuest.questManager.parser.addClassHandler("bannedabilities", AbilityHandler.class);
 		MineQuest.commandListener.helpmenu.put("player", "Access player functions");
 	}
