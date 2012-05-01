@@ -51,6 +51,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 
 import com.theminequest.MQCoreRPG.MQCoreRPG;
 import com.theminequest.MQCoreRPG.BukkitEvents.PlayerRegisterEvent;
+import com.theminequest.MQCoreRPG.Class.ClassDetails;
 import com.theminequest.MineQuest.MineQuest;
 import com.theminequest.MineQuest.BukkitEvents.QuestAvailableEvent;
 import com.theminequest.MineQuest.BukkitEvents.QuestCompleteEvent;
@@ -268,7 +269,8 @@ public class PlayerManager implements Listener {
 			return;
 		Player p = (Player) e.getEntity();
 		PlayerDetails d = getPlayerDetails(p);
-		int amount = e.getDamage();
+		ClassDetails c = MQCoreRPG.classManager.getClassDetail(d.getClassID());
+		int amount = (c.getDamageFromCause(e.getCause())+e.getDamage());
 		long total = d.getHealth()-amount;
 		if (total<0)
 			total = 0;

@@ -89,7 +89,8 @@ public class ClassManager implements Listener {
 		if (!(cause.getDamager() instanceof Player))
 			return;
 		PlayerDetails d = MQCoreRPG.playerManager.getPlayerDetails((Player) cause.getDamager());
-		int addexp = (int) Math.round(50*amt);
+		ClassDetails cd = MQCoreRPG.classManager.getClassDetail(d.getClassID());
+		int addexp = (int) Math.round(cd.getDamageFromCause(cause.getCause())*amt);
 		if (MQCoreRPG.popupManager!=null){
 			MQCoreRPG.popupManager.triggerExpPopup((Player) cause.getDamager(), addexp);
 			MQCoreRPG.popupManager.triggerNotificationPopup((Player) cause.getDamager(), "Defeated " + e.getEntityType().getName() + "!\nGained " + addexp + " exp.");

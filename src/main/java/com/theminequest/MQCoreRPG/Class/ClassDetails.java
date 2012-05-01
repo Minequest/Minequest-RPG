@@ -28,7 +28,7 @@ public class ClassDetails {
 	private int baseexpby;
 	private int basehealthby;
 	private Map<String,Integer> experience;
-	private Map<String,Double> damagecost;
+	private Map<String,Integer> damagecost;
 	
 	protected ClassDetails(){
 		name = "default";
@@ -38,12 +38,12 @@ public class ClassDetails {
 		baseexpby = 0;
 		basehealthby = 0;
 		experience = new LinkedHashMap<String,Integer>();
-		damagecost = new LinkedHashMap<String,Double>();
+		damagecost = new LinkedHashMap<String,Integer>();
 		for (EntityType e : EntityType.values()){
 			experience.put(e.getName(), MQCoreRPG.configuration.getInt("EXP_def_drop_"+e.getName(), 10));
 		}
 		for (DamageCause d : DamageCause.values()){
-			damagecost.put(d.name(), MQCoreRPG.configuration.getDouble("DMG_def_"+d.name(),10));
+			damagecost.put(d.name(), MQCoreRPG.configuration.getInt("DMG_def_"+d.name(),10));
 		}
 	}
 	
@@ -70,7 +70,7 @@ public class ClassDetails {
 		for (DamageCause d : DamageCause.values()){
 			if (p.containsKey("DMG_"+d.name())){
 				damagecost.remove(d.name());
-				damagecost.put(d.name(), p.getDouble("DMG_"+d.name()));
+				damagecost.put(d.name(), p.getInt("DMG_"+d.name()));
 			}
 		}
 	}
@@ -86,7 +86,7 @@ public class ClassDetails {
 			p.setInt("EXP_drop_"+e.getName(),experience.get(e.getName()));
 		}
 		for (DamageCause d : DamageCause.values()){
-			p.setDouble("DMG_"+d.name(),damagecost.get(d.name()));
+			p.setInt("DMG_"+d.name(),damagecost.get(d.name()));
 		}
 		p.save();
 	}
@@ -119,12 +119,35 @@ public class ClassDetails {
 		return BASE_HEALTH + basehealthby;
 	}
 	
+	/**
+	 * Return the amount of experience that this
+	 * entity type would drop upon death by a player
+	 * of this class from their base experience.
+	 * Will vary experience between 0.5*value and 1*value.
+	 * @param e Entity Type
+	 * @see org.bukkit.entity.EntityType
+	 * @return Amount of EXP, out of base experience value.
+	 */
 	public int getExperienceFromEntityDeath(EntityType e){
-		return experience.get(e.getName());
+		double variance = Math.random();
+		if (variance<0.5)
+			variance=0.5;
+		return (int) Math.round(experience.get(e.getName())*variance);
 	}
 	
-	public double getDamageFromCause(DamageCause d){
-		return damagecost.get(d.name());
+	/**
+	 * Return the amount of damage that this cause would
+	 * do to a person of this class from their base damage.
+	 * Will vary damage between 0.5*value and 1*value.
+	 * @param d Damage Cause
+	 * @see org.bukkit.event.entity.EntityDamageEvent.DamageCause
+	 * @return Amount of Damage, out of base damage value.
+	 */
+	public int getDamageFromCause(DamageCause d){
+		double variance = Math.random();
+		if (variance<0.5)
+			variance=0.5;
+		return (int) Math.round(damagecost.get(d.name())*variance);
 	}
 
 }

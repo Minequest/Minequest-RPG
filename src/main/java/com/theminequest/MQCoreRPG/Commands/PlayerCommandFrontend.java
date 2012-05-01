@@ -83,6 +83,35 @@ public class PlayerCommandFrontend extends CommandFrontend {
 		return true;
 	}
 	
+	public Boolean setclass(Player p, String[] args){
+		if (p!=null){
+			if (!p.isOp())
+				return false;
+		}
+		
+		CommandSender c;
+		if (p==null)
+			c = Bukkit.getConsoleSender();
+		else
+			c = p;
+		
+		if (args.length!=2){
+			c.sendMessage("Invalid number of arguments.");
+			return false;
+		}
+		
+		Player player = Bukkit.getPlayerExact(args[0]);
+		if (player==null){
+			c.sendMessage("No such player. :(");
+			return false;
+		}
+		
+		PlayerDetails details = MQCoreRPG.playerManager.getPlayerDetails(player);
+		details.setClassID(args[1]);
+		c.sendMessage("Modified.");
+		return true;
+	}
+	
 	public Boolean giveexp(Player p, String[] args){
 		if (p!=null){
 			if (!p.isOp())
@@ -226,6 +255,7 @@ public class PlayerCommandFrontend extends CommandFrontend {
 			messages.add(ChatUtils.formatHelp("player heal [name]", "Heal a player."));
 			messages.add(ChatUtils.formatHelp("player levelup [name]", "Level up a player by 1."));
 			messages.add(ChatUtils.formatHelp("player setlevel [name] [lvl]", "Set the level of a player."));
+			messages.add(ChatUtils.formatHelp("player setclass [name] [class]", "Set the class of a player."));
 		}
 		messages.add(ChatUtils.formatHeader("Player Commands"));
 		messages.add(ChatUtils.formatHelp("player info", "Retrieve your information."));
