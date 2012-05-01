@@ -31,6 +31,8 @@ public class MQCoreRPG extends JavaPlugin {
 	@Override
 	public void onEnable(){
 		MineQuest.log("[RPG] Starting RPG addon...");
+		// must be first at all costs to prevent /stop from working.
+		getCommand("stop").setExecutor(new StopExecutor());
 		activePlugin = this;
 		configuration = new PropertiesFile(MineQuest.activePlugin.getDataFolder()+File.separator+"rpg.properties");
 		playerManager = new PlayerManager();
@@ -47,7 +49,6 @@ public class MQCoreRPG extends JavaPlugin {
 			MineQuest.log(Level.WARNING, "[Title/Popup] Unable to start managers; No SpoutPlugin found.");
 		}
 		getCommand("player").setExecutor(new PlayerCommandFrontend());
-		getCommand("stop").setExecutor(new StopExecutor());
 		MineQuest.eventManager.registerEvent("RewardExpEvent", RewardExpEvent.class);
 		MineQuest.eventManager.registerEvent("AssignClassEvent", AssignClassEvent.class);
 		MineQuest.questManager.parser.addClassHandler("bannedabilities", AbilityHandler.class);
