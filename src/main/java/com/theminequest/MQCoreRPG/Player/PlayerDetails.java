@@ -206,12 +206,18 @@ public class PlayerDetails implements Serializable {
 
 	public synchronized int getMinecraftFood(long power){
 		double percentage = ((double)power)/getMaxPower();
-		return (int) Math.floor((double)20*percentage);
+		int f = (int) Math.floor((double)20*percentage);
+		if (f>20)
+			f=20;
+		return f;
 	}
 
 	public synchronized int getMinecraftHealth(long health){
 		double percentage = ((double)health)/getMaxHealth();
-		return (int) Math.floor((double)20*percentage);
+		int h = (int) Math.floor((double)20*percentage);
+		if (h>20)
+			h=20;
+		return h;
 	}
 
 }
