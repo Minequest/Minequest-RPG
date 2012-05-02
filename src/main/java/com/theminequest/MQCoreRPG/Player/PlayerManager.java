@@ -300,8 +300,7 @@ public class PlayerManager implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerEnchant(EnchantItemEvent e){
 		PlayerDetails p = getPlayerDetails(e.getEnchanter());
-		int level = e.getExpLevelCost();
-		p.modifyPowerBy((int) Math.round(-1*level*100*Math.random()));
+		p.modifyPowerBy((int) Math.round(-1*(Math.random()*p.getPower())));
 		e.setExpLevelCost(0);
 	}
 
