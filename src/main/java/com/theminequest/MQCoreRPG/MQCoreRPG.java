@@ -52,7 +52,7 @@ public class MQCoreRPG extends JavaPlugin {
 		MineQuest.eventManager.registerEvent("RewardExpEvent", RewardExpEvent.class);
 		MineQuest.eventManager.registerEvent("AssignClassEvent", AssignClassEvent.class);
 		MineQuest.questManager.parser.addClassHandler("bannedabilities", AbilityHandler.class);
-		MineQuest.commandListener.helpmenu.put("player", "Access player functions");
+		MineQuest.commandListener.helpmenu.put("player", "List player commands. (RPG)");
 	}
 
 	@Override
