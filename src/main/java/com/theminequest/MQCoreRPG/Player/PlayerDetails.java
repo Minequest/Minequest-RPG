@@ -192,7 +192,7 @@ public class PlayerDetails implements Serializable {
 	}
 
 	public synchronized void updateMinecraftView(){
-		if (!getPlayer().isDead()){
+		if (getPlayer()!=null && !getPlayer().isDead()){
 			getPlayer().setExp(getMinecraftLevelExp(getExperience(),getLevel()));
 			getPlayer().setLevel(getLevel());
 			getPlayer().setFoodLevel(getMinecraftFood(getPower()));
