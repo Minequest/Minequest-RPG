@@ -28,6 +28,7 @@ import java.util.Random;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -268,6 +269,8 @@ public class PlayerManager implements Listener {
 		if (!(e.getEntity() instanceof Player))
 			return;
 		Player p = (Player) e.getEntity();
+		if (p.getGameMode()==GameMode.CREATIVE)
+			return;
 		PlayerDetails d = getPlayerDetails(p);
 		ClassDetails c = MQCoreRPG.classManager.getClassDetail(d.getClassID());
 		int amount = (c.getDamageFromCause(e.getCause())+e.getDamage());
