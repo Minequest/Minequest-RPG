@@ -250,17 +250,17 @@ public class PlayerManager implements Listener {
 
 	// Damage START
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent e){
 		damageEvents(e);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityDamageByBlockEvent(EntityDamageByBlockEvent e){
 		damageEvents(e);
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityDamageEvent(EntityDamageEvent e){
 		damageEvents(e);
 	}
