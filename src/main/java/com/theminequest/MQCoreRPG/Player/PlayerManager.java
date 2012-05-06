@@ -109,11 +109,13 @@ public class PlayerManager implements Listener {
 			@Override
 			public void run() {
 				while (!shutdown){
-					for (PlayerDetails d : players.values()){
-						try {
-							d.updateMinecraftView();
-						} catch (NullPointerException e){
-							MineQuest.log(Level.WARNING, "[Player] Thread NPE! Can't keep up! Did the system time change, or is the server overloaded?");
+					synchronized(players){
+						for (PlayerDetails d : players.values()){
+							try {
+								d.updateMinecraftView();
+							} catch (NullPointerException e){
+								MineQuest.log(Level.WARNING, "[Player] Thread NPE! Can't keep up! Did the system time change, or is the server overloaded?");
+							}
 						}
 					}
 					try {
@@ -137,13 +139,15 @@ public class PlayerManager implements Listener {
 	}
 
 	public void saveAll(){
-		for (PlayerDetails d : players.values()){
-			try {
-				PlayerSQL.updatePlayerObject(d.getPlayer().getName(), d);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+		synchronized(players){
+			for (PlayerDetails d : players.values()){
+				try {
+					PlayerSQL.updatePlayerObject(d.getPlayer().getName(), d);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -259,12 +263,12 @@ public class PlayerManager implements Listener {
 	public void onEntityDamageByBlockEvent(EntityDamageByBlockEvent e){
 		damageEvents(e);
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityDamageEvent(EntityDamageEvent e){
 		damageEvents(e);
 	}
-	
+
 	private void damageEvents(EntityDamageEvent e){
 		if (!(e.getEntity() instanceof Player))
 			return;
@@ -299,7 +303,7 @@ public class PlayerManager implements Listener {
 	public void onPlayerExpChangeEvent(PlayerExpChangeEvent e){
 		e.setAmount(0);
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerEnchant(EnchantItemEvent e){
 		PlayerDetails p = getPlayerDetails(e.getEnchanter());
