@@ -106,6 +106,11 @@ public class PlayerCommandFrontend extends CommandFrontend {
 			return false;
 		}
 
+		if (!MQCoreRPG.classManager.hasClassDetail(args[1])){
+			c.sendMessage("No such class!");
+			return false;
+		}
+		
 		PlayerDetails details = MQCoreRPG.playerManager.getPlayerDetails(player);
 		details.setClassID(args[1]);
 		c.sendMessage("Modified.");
