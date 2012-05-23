@@ -96,7 +96,7 @@
 	<repositories>
 		<repository>
 			<id>lincom-repo</id>
-			<url>http://build.lincomlinux.org/artifactory/repo</url>
+			<url>http://build.lincomlinux.org/nexus/content/groups/public/</url>
 		</repository>
 		<repository>
 			<id>bukkit-repo</id>
