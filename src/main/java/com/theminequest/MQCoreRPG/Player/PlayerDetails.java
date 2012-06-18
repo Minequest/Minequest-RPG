@@ -55,7 +55,6 @@ public class PlayerDetails extends Statistic implements Serializable {
 	private boolean abilitiesEnabled;
 
 	// >_>
-	@Field
 	public Map<Ability, Long> abilitiesCoolDown;
 	// end >_>
 
@@ -86,6 +85,11 @@ public class PlayerDetails extends Statistic implements Serializable {
 		power = Math.round(getMaxPower() * 0.75);
 		giveMana = true;
 		updateMinecraftView();
+	}
+	
+	public void resetupPlayerDetails(){
+		abilitiesCoolDown = Collections
+				.synchronizedMap(new LinkedHashMap<Ability, Long>());
 	}
 
 	public Player getPlayer() {

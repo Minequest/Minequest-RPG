@@ -150,6 +150,7 @@ public class PlayerManager implements Listener {
 			obj = Managers.getStatisticManager().getStatistic(p.getName(),
 					PlayerDetails.class);
 			if (obj != null) {
+				obj.resetupPlayerDetails();
 				players.put(p, obj);
 				return;
 			}
