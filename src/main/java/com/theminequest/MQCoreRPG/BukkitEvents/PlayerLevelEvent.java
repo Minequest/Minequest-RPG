@@ -26,24 +26,24 @@ import org.bukkit.event.HandlerList;
 public class PlayerLevelEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
-	
+
 	public static HandlerList getHandlerList() {
-	    return handlers;
+		return handlers;
 	}
-	
+
 	private Player player;
-	
-	public PlayerLevelEvent(Player p){
+
+	public PlayerLevelEvent(Player p) {
 		player = p;
 	}
-	
-	public Player getPlayer(){
+
+	public Player getPlayer() {
 		return player;
 	}
-	
+
 	@Override
 	public HandlerList getHandlers() {
 		return handlers;
 	}
-	
+
 }

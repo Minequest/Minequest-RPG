@@ -21,10 +21,7 @@ package com.theminequest.MQCoreRPG.API.Abilities;
 
 import java.util.HashMap;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Entity;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -32,22 +29,20 @@ import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import com.theminequest.MQCoreRPG.BukkitEvents.AbilityRefreshedEvent;
-import com.theminequest.MineQuest.MineQuest;
 import com.theminequest.MineQuest.API.Managers;
 
 public class AbilityManager implements Listener {
-	
-	private HashMap<String,Ability> abilities;
-	
-	public AbilityManager(){
+
+	private HashMap<String, Ability> abilities;
+
+	public AbilityManager() {
 		Managers.log("[Ability] Starting Manager...");
-		abilities = new HashMap<String,Ability>();
+		abilities = new HashMap<String, Ability>();
 	}
-	
-	public void registerAbility(Ability a){
+
+	public void registerAbility(Ability a) {
 		if (abilities.containsKey(a))
 			throw new IllegalArgumentException("Ability exists!");
 		Managers.log("[Ability] Registered " + a.getName());
@@ -55,33 +50,34 @@ public class AbilityManager implements Listener {
 	}
 
 	@EventHandler
-	public void abilityRefreshed(AbilityRefreshedEvent e){
+	public void abilityRefreshed(AbilityRefreshedEvent e) {
 		e.getPlayer().sendMessage(
-				ChatColor.GRAY+"Ability " + e.getAbility().getName() + " recharged!");
+				ChatColor.GRAY + "Ability " + e.getAbility().getName()
+						+ " recharged!");
 	}
-	
+
 	@EventHandler
-	public void onPlayerEggThrowEvent(PlayerEggThrowEvent e){
+	public void onPlayerEggThrowEvent(PlayerEggThrowEvent e) {
 		onEvent(e);
 	}
-	
+
 	@EventHandler
-	public void onPlayerFishEvent(PlayerFishEvent e){
+	public void onPlayerFishEvent(PlayerFishEvent e) {
 		onEvent(e);
 	}
-	
+
 	@EventHandler
-	public void onPlayerInteractEntityEvent(PlayerInteractEntityEvent e){
+	public void onPlayerInteractEntityEvent(PlayerInteractEntityEvent e) {
 		onEvent(e);
 	}
-	
+
 	@EventHandler
-	public void onPlayerInteractEvent(PlayerInteractEvent e){
+	public void onPlayerInteractEvent(PlayerInteractEvent e) {
 		onEvent(e);
 	}
-	
-	private void onEvent(PlayerEvent e){
-		for (Ability a : abilities.values()){
+
+	private void onEvent(PlayerEvent e) {
+		for (Ability a : abilities.values()) {
 			if (a.onEventCaught(e))
 				return;
 		}

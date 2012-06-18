@@ -26,30 +26,30 @@ import org.bukkit.event.HandlerList;
 public class PlayerExperienceEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
-	
+
 	public static HandlerList getHandlerList() {
-	    return handlers;
+		return handlers;
 	}
-	
+
 	private Player player;
 	private int experience;
-	
-	public PlayerExperienceEvent(Player p, int expchange){
+
+	public PlayerExperienceEvent(Player p, int expchange) {
 		player = p;
 		experience = expchange;
 	}
-	
-	public Player getPlayer(){
+
+	public Player getPlayer() {
 		return player;
 	}
-	
-	public int getExperienceChange(){
+
+	public int getExperienceChange() {
 		return experience;
 	}
-	
+
 	@Override
 	public HandlerList getHandlers() {
 		return handlers;
 	}
-	
+
 }

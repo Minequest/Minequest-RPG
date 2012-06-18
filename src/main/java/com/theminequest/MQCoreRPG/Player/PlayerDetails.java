@@ -20,9 +20,6 @@
 package com.theminequest.MQCoreRPG.Player;
 
 import java.io.Serializable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -53,13 +50,13 @@ public class PlayerDetails extends Statistic implements Serializable {
 
 	@Id
 	private long uuid;
-	
+
 	@Field
 	private boolean abilitiesEnabled;
-	
+
 	// >_>
 	@Field
-	public Map<Ability,Long> abilitiesCoolDown;
+	public Map<Ability, Long> abilitiesCoolDown;
 	// end >_>
 
 	@Field
@@ -76,25 +73,26 @@ public class PlayerDetails extends Statistic implements Serializable {
 	private long exp;
 	@Field
 	private String classid;
-	
-	public void setupPlayerDetails(Player p){
+
+	public void setupPlayerDetails(Player p) {
 		this.setPlayerName(p.getName());
 		abilitiesEnabled = false;
-		abilitiesCoolDown = Collections.synchronizedMap(new LinkedHashMap<Ability,Long>());
+		abilitiesCoolDown = Collections
+				.synchronizedMap(new LinkedHashMap<Ability, Long>());
 		classid = "default";
 		level = 1;
 		exp = 0;
 		health = getMaxHealth();
-		power = Math.round(getMaxPower()*0.75);
+		power = Math.round(getMaxPower() * 0.75);
 		giveMana = true;
 		updateMinecraftView();
 	}
 
-	public Player getPlayer(){
+	public Player getPlayer() {
 		return Bukkit.getPlayerExact(getPlayerName());
 	}
 
-	public synchronized int getLevel(){
+	public synchronized int getLevel() {
 		return level;
 	}
 
@@ -104,123 +102,129 @@ public class PlayerDetails extends Statistic implements Serializable {
 		Bukkit.getPluginManager().callEvent(event);
 	}
 
-	public synchronized void levelUp(){
-		level+=1;
+	public synchronized void levelUp() {
+		level += 1;
 		PlayerLevelEvent event = new PlayerLevelEvent(getPlayer());
 		Bukkit.getPluginManager().callEvent(event);
-		exp = exp-(MQCoreRPG.classManager.getClassDetail(classid).getBaseExp()*(level-1));
-		if (exp<0)
+		exp = exp - MQCoreRPG.classManager.getClassDetail(classid).getBaseExp()
+				* (level - 1);
+		if (exp < 0)
 			exp = 0;
 	}
 
-	public synchronized long getExperience(){
+	public synchronized long getExperience() {
 		return exp;
 	}
 
-	public synchronized long getMaxExperience(){
-		return MQCoreRPG.classManager.getClassDetail(classid).getBaseExp()*level;
+	public synchronized long getMaxExperience() {
+		return MQCoreRPG.classManager.getClassDetail(classid).getBaseExp()
+				* level;
 	}
 
-	public synchronized void modifyExperienceBy(int e){
-		exp+=e;
+	public synchronized void modifyExperienceBy(int e) {
+		exp += e;
 		PlayerExperienceEvent event = new PlayerExperienceEvent(getPlayer(), e);
 		Bukkit.getPluginManager().callEvent(event);
-		while (exp>=getMaxExperience())
+		while (exp >= getMaxExperience())
 			levelUp();
 	}
 
-	public synchronized String getClassID(){
+	public synchronized String getClassID() {
 		return classid;
 	}
 
-	public synchronized void setClassID(String classid){
+	public synchronized void setClassID(String classid) {
 		this.classid = classid;
 		PlayerClassEvent e = new PlayerClassEvent(getPlayer());
 		Bukkit.getPluginManager().callEvent(e);
 	}
 
-	public synchronized long getPower(){
+	public synchronized long getPower() {
 		return power;
 	}
 
-	public synchronized long getMaxPower(){
-		return MQCoreRPG.classManager.getClassDetail(classid).getBasePower()*level;
+	public synchronized long getMaxPower() {
+		return MQCoreRPG.classManager.getClassDetail(classid).getBasePower()
+				* level;
 	}
 
-	public synchronized void modifyPowerBy(int m){
+	public synchronized void modifyPowerBy(int m) {
 		long powertoadd = m;
-		if (power==MQCoreRPG.classManager.getClassDetail(classid).getBasePower()*level)
+		if (power == MQCoreRPG.classManager.getClassDetail(classid)
+				.getBasePower() * level)
 			return;
-		else if (m+power>(getMaxPower()))
-			powertoadd = (getMaxPower())-(m+power);
-		power+=powertoadd;
-		PlayerPowerEvent event = new PlayerPowerEvent(getPlayer(),m);
+		else if (m + power > getMaxPower())
+			powertoadd = getMaxPower() - (m + power);
+		power += powertoadd;
+		PlayerPowerEvent event = new PlayerPowerEvent(getPlayer(), m);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isCancelled())
-			power-=powertoadd;
+			power -= powertoadd;
 	}
 
-	public synchronized long getHealth(){
+	public synchronized long getHealth() {
 		return health;
 	}
 
-	public synchronized long getMaxHealth(){
-		return MQCoreRPG.classManager.getClassDetail(classid).getBaseHealth()*level;
-	}
-	
-	public synchronized void setHealth(long l){
-		setHealth(l,true);
+	public synchronized long getMaxHealth() {
+		return MQCoreRPG.classManager.getClassDetail(classid).getBaseHealth()
+				* level;
 	}
 
-	public synchronized void setHealth(long l, boolean effect){
+	public synchronized void setHealth(long l) {
+		setHealth(l, true);
+	}
+
+	public synchronized void setHealth(long l, boolean effect) {
 		boolean hurt = false;
-		if (l<this.health)
+		if (l < this.health)
 			hurt = true;
 		this.health = l;
-		PlayerHealthEvent e = new PlayerHealthEvent(getPlayer(),this);
+		PlayerHealthEvent e = new PlayerHealthEvent(getPlayer(), this);
 		Bukkit.getPluginManager().callEvent(e);
 		if (effect && hurt)
 			getPlayer().playEffect(EntityEffect.HURT);
 	}
 
 	/*
-	 * A user should be able to toggle ability use on/off
-	 * with a command, like /ability on/off?
+	 * A user should be able to toggle ability use on/off with a command, like
+	 * /ability on/off?
 	 */
-	public synchronized boolean getAbilitiesEnabled(){
+	public synchronized boolean getAbilitiesEnabled() {
 		return abilitiesEnabled;
 	}
 
-	public synchronized void setAbilitiesEnabled(boolean b){
+	public synchronized void setAbilitiesEnabled(boolean b) {
 		abilitiesEnabled = b;
 	}
 
-	public synchronized void updateMinecraftView(){
-		if (getPlayer()!=null && !getPlayer().isDead()){
-			getPlayer().setExp(getMinecraftLevelExp(getExperience(),getLevel()));
+	public synchronized void updateMinecraftView() {
+		if (getPlayer() != null && !getPlayer().isDead()) {
+			getPlayer().setExp(
+					getMinecraftLevelExp(getExperience(), getLevel()));
 			getPlayer().setLevel(getLevel());
 			getPlayer().setFoodLevel(getMinecraftFood(getPower()));
 			getPlayer().setHealth(getMinecraftHealth(getHealth()));
 		}
 	}
-	
-	public synchronized float getMinecraftLevelExp(long exp, int level){
-		return ((float)getExperience()/getMaxExperience());
+
+	public synchronized float getMinecraftLevelExp(long exp, int level) {
+		return (float) getExperience() / getMaxExperience();
 	}
 
-	public synchronized int getMinecraftFood(long power){
-		double percentage = ((double)power)/getMaxPower();
-		int f = (int) Math.floor((double)20*percentage);
-		if (f>20)
-			f=20;
+	public synchronized int getMinecraftFood(long power) {
+		double percentage = (double) power / getMaxPower();
+		int f = (int) Math.floor(20 * percentage);
+		if (f > 20)
+			f = 20;
 		return f;
 	}
 
-	public synchronized int getMinecraftHealth(long health){
-		double percentage = ((double)health)/getMaxHealth();
-		int h = (int) Math.floor((double)20*percentage);
-		if (h>20)
-			h=20;
+	public synchronized int getMinecraftHealth(long health) {
+		double percentage = (double) health / getMaxHealth();
+		int h = (int) Math.floor(20 * percentage);
+		if (h > 20)
+			h = 20;
 		return h;
 	}
 

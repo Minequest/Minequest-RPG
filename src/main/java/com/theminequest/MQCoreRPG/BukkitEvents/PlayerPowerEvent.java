@@ -27,29 +27,29 @@ import org.bukkit.event.HandlerList;
 public class PlayerPowerEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
-	
+
 	public static HandlerList getHandlerList() {
-	    return handlers;
+		return handlers;
 	}
-	
+
 	private Player player;
 	private int mana;
 	private boolean canceled;
-	
-	public PlayerPowerEvent(Player p, int manachange){
+
+	public PlayerPowerEvent(Player p, int manachange) {
 		player = p;
 		mana = manachange;
 		canceled = false;
 	}
-	
-	public Player getPlayer(){
+
+	public Player getPlayer() {
 		return player;
 	}
-	
-	public int getExperienceChange(){
+
+	public int getExperienceChange() {
 		return mana;
 	}
-	
+
 	@Override
 	public HandlerList getHandlers() {
 		return handlers;

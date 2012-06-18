@@ -8,24 +8,24 @@ import com.theminequest.MQCoreRPG.MQCoreRPG;
 import com.theminequest.MQCoreRPG.Player.PlayerDetails;
 
 public class PlayerRegisterEvent extends Event {
-	
+
 	private static final HandlerList handlers = new HandlerList();
-	
+
 	public static HandlerList getHandlerList() {
-	    return handlers;
+		return handlers;
 	}
-	
+
 	private Player player;
-	
-	public PlayerRegisterEvent(Player p){
+
+	public PlayerRegisterEvent(Player p) {
 		player = p;
 	}
-	
-	public PlayerDetails getDetails(){
+
+	public PlayerDetails getDetails() {
 		return MQCoreRPG.playerManager.getPlayerDetails(player);
 	}
-	
-	public Player getPlayer(){
+
+	public Player getPlayer() {
 		return player;
 	}
 

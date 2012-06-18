@@ -9,7 +9,10 @@ public class AbilityHandler implements QuestParser.QHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.theminequest.MineQuest.Quest.QuestParser.QHandler#parseDetails(com.theminequest.MineQuest.Quest.Quest, java.util.List)
+	 * 
+	 * @see
+	 * com.theminequest.MineQuest.Quest.QuestParser.QHandler#parseDetails(com
+	 * .theminequest.MineQuest.Quest.Quest, java.util.List)
 	 * "ability,ability,ability,ability"
 	 */
 	@Override

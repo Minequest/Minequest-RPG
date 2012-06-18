@@ -10,25 +10,25 @@ import com.theminequest.MQCoreRPG.Player.PlayerDetails;
 public class PlayerClassEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
-	
+
 	public static HandlerList getHandlerList() {
-	    return handlers;
+		return handlers;
 	}
-	
+
 	private Player player;
-	
-	public PlayerClassEvent(Player p){
+
+	public PlayerClassEvent(Player p) {
 		player = p;
 	}
-	
-	public PlayerDetails getDetails(){
+
+	public PlayerDetails getDetails() {
 		return MQCoreRPG.playerManager.getPlayerDetails(player);
 	}
-	
-	public Player getPlayer(){
+
+	public Player getPlayer() {
 		return player;
 	}
-	
+
 	@Override
 	public HandlerList getHandlers() {
 		return handlers;

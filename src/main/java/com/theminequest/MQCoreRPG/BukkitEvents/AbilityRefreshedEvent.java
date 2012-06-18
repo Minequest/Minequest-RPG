@@ -26,13 +26,13 @@ import org.bukkit.event.HandlerList;
 import com.theminequest.MQCoreRPG.API.Abilities.Ability;
 
 public class AbilityRefreshedEvent extends Event {
-	
+
 	private static final HandlerList handlers = new HandlerList();
-	
+
 	public static HandlerList getHandlerList() {
-	    return handlers;
+		return handlers;
 	}
-	
+
 	private Ability ability;
 	private Player player;
 
@@ -40,12 +40,12 @@ public class AbilityRefreshedEvent extends Event {
 		ability = a;
 		player = p;
 	}
-	
-	public Ability getAbility(){
+
+	public Ability getAbility() {
 		return ability;
 	}
-	
-	public Player getPlayer(){
+
+	public Player getPlayer() {
 		return player;
 	}
 

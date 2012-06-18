@@ -22,23 +22,25 @@ package com.theminequest.MQCoreRPG.QEvents;
 import org.bukkit.entity.Player;
 
 import com.theminequest.MQCoreRPG.MQCoreRPG;
-import com.theminequest.MineQuest.MineQuest;
 import com.theminequest.MineQuest.API.CompleteStatus;
 import com.theminequest.MineQuest.API.Managers;
 import com.theminequest.MineQuest.API.Events.QuestEvent;
-import com.theminequest.MineQuest.API.Group.Group;
 import com.theminequest.MineQuest.API.Group.QuestGroup;
-import com.theminequest.MineQuest.Group.Party;
 
 public class RewardExpEvent extends QuestEvent {
-	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5542771222958268128L;
 	private int exptogive;
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.theminequest.MineQuest.Events.QEvent#parseDetails(java.lang.String[])
-	 * Details:
-	 * [0] amount of exp to give.
+	 * 
+	 * @see
+	 * com.theminequest.MineQuest.Events.QEvent#parseDetails(java.lang.String[])
+	 * Details: [0] amount of exp to give.
 	 */
 	@Override
 	public void parseDetails(String[] details) {
@@ -54,7 +56,8 @@ public class RewardExpEvent extends QuestEvent {
 	public CompleteStatus action() {
 		QuestGroup g = Managers.getQuestGroupManager().get(getQuest());
 		for (Player p : g.getMembers())
-			MQCoreRPG.playerManager.getPlayerDetails(p).modifyExperienceBy(exptogive/g.getMembers().size());
+			MQCoreRPG.playerManager.getPlayerDetails(p).modifyExperienceBy(
+					exptogive / g.getMembers().size());
 		return CompleteStatus.SUCCESS;
 	}
 

@@ -4,20 +4,24 @@ import org.bukkit.entity.Player;
 
 import com.theminequest.MQCoreRPG.MQCoreRPG;
 import com.theminequest.MQCoreRPG.Player.PlayerDetails;
-import com.theminequest.MineQuest.MineQuest;
 import com.theminequest.MineQuest.API.CompleteStatus;
 import com.theminequest.MineQuest.API.Managers;
 import com.theminequest.MineQuest.API.Events.QuestEvent;
-import com.theminequest.MineQuest.API.Group.Group;
 import com.theminequest.MineQuest.API.Group.QuestGroup;
 
 public class AssignClassEvent extends QuestEvent {
-	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4971056423240507304L;
 	private String classname;
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.theminequest.MineQuest.Events.QEvent#parseDetails(java.lang.String[])
+	 * 
+	 * @see
+	 * com.theminequest.MineQuest.Events.QEvent#parseDetails(java.lang.String[])
 	 * [0] Class Identifier (name)
 	 */
 	@Override
@@ -33,7 +37,7 @@ public class AssignClassEvent extends QuestEvent {
 	@Override
 	public CompleteStatus action() {
 		QuestGroup g = Managers.getQuestGroupManager().get(getQuest());
-		for (Player p : g.getMembers()){
+		for (Player p : g.getMembers()) {
 			PlayerDetails d = MQCoreRPG.playerManager.getPlayerDetails(p);
 			d.setClassID(classname);
 		}
