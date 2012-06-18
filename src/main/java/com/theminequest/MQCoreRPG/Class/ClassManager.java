@@ -20,14 +20,15 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import com.theminequest.MQCoreRPG.MQCoreRPG;
 import com.theminequest.MQCoreRPG.Player.PlayerDetails;
 import com.theminequest.MineQuest.MineQuest;
+import com.theminequest.MineQuest.API.Managers;
 
 public class ClassManager implements Listener {
 	
-	public static final String loc = MineQuest.activePlugin.getDataFolder()+File.separator+"classes";
+	public static final String loc = Managers.getActivePlugin().getDataFolder()+File.separator+"classes";
 	private LinkedHashMap<String,ClassDetails> classes;
 
 	public ClassManager(){
-		MineQuest.log("[Class] Starting Manager...");
+		Managers.log("[Class] Starting Manager...");
 		classes = new LinkedHashMap<String,ClassDetails>();
 		initialize();
 		ClassDetails def = new ClassDetails();
@@ -60,7 +61,7 @@ public class ClassManager implements Listener {
 				ClassDetails d = new ClassDetails(c);
 				classes.put(d.getName(), d);
 			} catch (IOException e) {
-				MineQuest.log(Level.SEVERE, "[Class] Class Specification " + c.getName() + " is invalid.");
+				Managers.log(Level.SEVERE, "[Class] Class Specification " + c.getName() + " is invalid.");
 			}
 		}
 	}

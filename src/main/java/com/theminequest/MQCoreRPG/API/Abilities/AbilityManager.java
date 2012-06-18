@@ -1,7 +1,7 @@
 /**
  * This file, AbilityManager.java, is part of MineQuest:
  * A full featured and customizable quest/mission system.
- * Copyright (C) 2012 The MineQuest Team
+ * Copyright (C) 2012 The MineQuest Party
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,21 +36,21 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.theminequest.MQCoreRPG.BukkitEvents.AbilityRefreshedEvent;
 import com.theminequest.MineQuest.MineQuest;
+import com.theminequest.MineQuest.API.Managers;
 
 public class AbilityManager implements Listener {
 	
 	private HashMap<String,Ability> abilities;
 	
 	public AbilityManager(){
-		MineQuest.log("[Ability] Starting Manager...");
+		Managers.log("[Ability] Starting Manager...");
 		abilities = new HashMap<String,Ability>();
-		MineQuest.questManager.parser.addClassHandler("bannedabilities", AbilityHandler.class);
 	}
 	
 	public void registerAbility(Ability a){
 		if (abilities.containsKey(a))
 			throw new IllegalArgumentException("Ability exists!");
-		MineQuest.log("[Ability] Registered " + a.getName());
+		Managers.log("[Ability] Registered " + a.getName());
 		abilities.put(a.getName(), a);
 	}
 

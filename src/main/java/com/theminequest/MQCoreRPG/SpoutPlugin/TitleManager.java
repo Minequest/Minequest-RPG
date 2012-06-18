@@ -11,12 +11,13 @@ import com.theminequest.MQCoreRPG.MQCoreRPG;
 import com.theminequest.MQCoreRPG.BukkitEvents.PlayerLevelEvent;
 import com.theminequest.MQCoreRPG.Player.PlayerDetails;
 import com.theminequest.MineQuest.MineQuest;
+import com.theminequest.MineQuest.API.Managers;
 
 public class TitleManager implements Listener {
 
 	public TitleManager() throws ClassNotFoundException{
 		Class.forName("org.getspout.spoutapi.Spout");
-		MineQuest.log("[Title] Starting Manager...");
+		Managers.log("[Title] Starting Manager...");
 	}
 	
 	@EventHandler(priority = EventPriority.LOW)

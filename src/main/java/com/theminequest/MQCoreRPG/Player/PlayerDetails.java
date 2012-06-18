@@ -1,7 +1,7 @@
 /**
  * This file, PlayerDetails.java, is part of MineQuest:
  * A full featured and customizable quest/mission system.
- * Copyright (C) 2012 The MineQuest Team
+ * Copyright (C) 2012 The MineQuest Party
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,13 +25,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.EntityEffect;
 import org.bukkit.entity.Player;
 
+import com.alta189.simplesave.Field;
+import com.alta189.simplesave.Id;
+import com.alta189.simplesave.Table;
 import com.theminequest.MQCoreRPG.MQCoreRPG;
 import com.theminequest.MQCoreRPG.API.Abilities.Ability;
 import com.theminequest.MQCoreRPG.BukkitEvents.PlayerClassEvent;
@@ -39,42 +41,44 @@ import com.theminequest.MQCoreRPG.BukkitEvents.PlayerExperienceEvent;
 import com.theminequest.MQCoreRPG.BukkitEvents.PlayerHealthEvent;
 import com.theminequest.MQCoreRPG.BukkitEvents.PlayerLevelEvent;
 import com.theminequest.MQCoreRPG.BukkitEvents.PlayerPowerEvent;
-import com.theminequest.MQCoreRPG.Class.ClassDetails;
-import com.theminequest.MineQuest.MineQuest;
-import com.theminequest.MineQuest.Quest.Quest;
-import com.theminequest.MineQuest.Utils.PropertiesFile;
-import com.theminequest.MineQuest.Backend.GroupBackend;
+import com.theminequest.MineQuest.API.Tracker.StatisticManager.Statistic;
 
-/**
- * Extra details about the Player
- * 
- * @author MineQuest
- * 
- */
-public class PlayerDetails implements Serializable {
+@Table("minequest_rpg_players")
+public class PlayerDetails extends Statistic implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2315094916617378789L;
 
+	@Id
+	private long uuid;
+	
+	@Field
 	private boolean abilitiesEnabled;
+	
 	// >_>
+	@Field
 	public Map<Ability,Long> abilitiesCoolDown;
 	// end >_>
 
+	@Field
 	protected volatile boolean giveMana;
 
 	// player properties
-	private String name;
+	@Field
 	private long health;
+	@Field
 	private long power;
+	@Field
 	private int level;
+	@Field
 	private long exp;
+	@Field
 	private String classid;
-
-	public PlayerDetails(Player p) {
-		name = p.getName();
+	
+	public void setupPlayerDetails(Player p){
+		this.setPlayerName(p.getName());
 		abilitiesEnabled = false;
 		abilitiesCoolDown = Collections.synchronizedMap(new LinkedHashMap<Ability,Long>());
 		classid = "default";
@@ -87,7 +91,7 @@ public class PlayerDetails implements Serializable {
 	}
 
 	public Player getPlayer(){
-		return Bukkit.getPlayerExact(name);
+		return Bukkit.getPlayerExact(getPlayerName());
 	}
 
 	public synchronized int getLevel(){

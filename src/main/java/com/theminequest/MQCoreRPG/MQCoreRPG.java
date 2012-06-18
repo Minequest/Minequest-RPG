@@ -16,7 +16,8 @@ import com.theminequest.MQCoreRPG.QEvents.RewardExpEvent;
 import com.theminequest.MQCoreRPG.SpoutPlugin.PopupManager;
 import com.theminequest.MQCoreRPG.SpoutPlugin.TitleManager;
 import com.theminequest.MineQuest.MineQuest;
-import com.theminequest.MineQuest.Utils.PropertiesFile;
+import com.theminequest.MineQuest.API.Managers;
+import com.theminequest.MineQuest.API.Utils.PropertiesFile;
 
 public class MQCoreRPG extends JavaPlugin {
 	
@@ -30,11 +31,11 @@ public class MQCoreRPG extends JavaPlugin {
 	
 	@Override
 	public void onEnable(){
-		MineQuest.log("[RPG] Starting RPG addon...");
+		Managers.log("[RPG] Starting RPG addon...");
 		// must be first at all costs to prevent /stop from working.
 		getCommand("stop").setExecutor(new StopExecutor());
 		activePlugin = this;
-		configuration = new PropertiesFile(MineQuest.activePlugin.getDataFolder()+File.separator+"rpg.properties");
+		configuration = new PropertiesFile(Managers.getActivePlugin().getDataFolder()+File.separator+"rpg.properties");
 		playerManager = new PlayerManager();
 		getServer().getPluginManager().registerEvents(playerManager, this);
 		abilityManager = new AbilityManager();
@@ -46,12 +47,12 @@ public class MQCoreRPG extends JavaPlugin {
 			popupManager = new PopupManager();
 			getServer().getPluginManager().registerEvents(popupManager, this);
 		} catch (ClassNotFoundException e) {
-			MineQuest.log(Level.WARNING, "[Title/Popup] Unable to start managers; No SpoutPlugin found.");
+			Managers.log(Level.WARNING, "[Title/Popup] Unable to start managers; No SpoutPlugin found.");
 		}
 		getCommand("player").setExecutor(new PlayerCommandFrontend());
-		MineQuest.eventManager.registerEvent("RewardExpEvent", RewardExpEvent.class);
-		MineQuest.eventManager.registerEvent("AssignClassEvent", AssignClassEvent.class);
-		MineQuest.questManager.parser.addClassHandler("bannedabilities", AbilityHandler.class);
+		Managers.getEventManager().addEvent("RewardExpEvent", RewardExpEvent.class);
+		Managers.getEventManager().addEvent("AssignClassEvent", AssignClassEvent.class);
+		Managers.getQuestManager().getParser().addClassHandler("bannedabilities", AbilityHandler.class);
 		MineQuest.commandListener.helpmenu.put("player", "List player commands. (RPG)");
 	}
 

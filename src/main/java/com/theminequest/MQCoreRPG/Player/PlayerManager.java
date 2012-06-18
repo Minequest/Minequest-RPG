@@ -1,7 +1,7 @@
 /**
  * This file, PlayerManager.java, is part of MineQuest:
  * A full featured and customizable quest/mission system.
- * Copyright (C) 2012 The MineQuest Team
+ * Copyright (C) 2012 The MineQuest Party
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,9 +54,9 @@ import com.theminequest.MQCoreRPG.MQCoreRPG;
 import com.theminequest.MQCoreRPG.BukkitEvents.PlayerRegisterEvent;
 import com.theminequest.MQCoreRPG.Class.ClassDetails;
 import com.theminequest.MineQuest.MineQuest;
-import com.theminequest.MineQuest.BukkitEvents.QuestAvailableEvent;
-import com.theminequest.MineQuest.BukkitEvents.QuestCompleteEvent;
-import com.theminequest.MineQuest.BukkitEvents.GroupInviteEvent;
+import com.theminequest.MineQuest.API.Managers;
+import com.theminequest.MineQuest.API.BukkitEvents.GroupInviteEvent;
+import com.theminequest.MineQuest.API.BukkitEvents.QuestCompleteEvent;
 
 public class PlayerManager implements Listener {
 
@@ -65,16 +65,17 @@ public class PlayerManager implements Listener {
 	public static final int MAX_LEVEL = 50;
 
 	public PlayerManager(){
-		MineQuest.log("[Player] Starting Manager...");
+		Managers.log("[Player] Starting Manager...");
 		players = Collections.synchronizedMap(new LinkedHashMap<Player,PlayerDetails>());
 		shutdown = false;
 
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(MineQuest.activePlugin, new Runnable(){
+		Managers.getStatisticManager().registerStatistic(PlayerDetails.class);
+
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(Managers.getActivePlugin(), new Runnable(){
 
 			@Override
 			public void run() {
 				saveAll();
-				MineQuest.log("[Player] Routine Record Save Finished.");
 			}
 
 		}, 1200, 18000);
@@ -114,7 +115,7 @@ public class PlayerManager implements Listener {
 							try {
 								d.updateMinecraftView();
 							} catch (NullPointerException e){
-								MineQuest.log(Level.WARNING, "[Player] Thread NPE! Can't keep up! Did the system time change, or is the server overloaded?");
+								Managers.log(Level.WARNING, "[Player] Thread NPE! Can't keep up! Did the system time change, is the server overloaded, or has the player changed worlds?");
 							}
 						}
 					}
@@ -141,13 +142,7 @@ public class PlayerManager implements Listener {
 	public void saveAll(){
 		synchronized(players){
 			for (PlayerDetails d : players.values()){
-				try {
-					PlayerSQL.updatePlayerObject(d.getPlayer().getName(), d);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				Managers.getStatisticManager().setStatistic(d, PlayerDetails.class);
 			}
 		}
 	}
@@ -155,25 +150,14 @@ public class PlayerManager implements Listener {
 	private void playerAcct(Player p){
 		if (!players.containsKey(p)){
 			PlayerDetails obj;
-			try {
-				obj = PlayerSQL.retrievePlayerObject(p.getName());
-				if (obj!=null){
-					players.put(p, obj);
-					return;
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+			obj = Managers.getStatisticManager().getStatistic(p.getName(), PlayerDetails.class);
+			if (obj!=null){
+				players.put(p, obj);
+				return;
 			}
-			obj = new PlayerDetails(p);
-			try {
-				PlayerSQL.insertPlayerObject(p.getName(), obj);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			obj = new PlayerDetails();
+			obj.setupPlayerDetails(p);
+			Managers.getStatisticManager().setStatistic(obj, PlayerDetails.class);
 			players.put(p, obj);
 			PlayerRegisterEvent e = new PlayerRegisterEvent(p);
 			Bukkit.getPluginManager().callEvent(e);
@@ -187,33 +171,21 @@ public class PlayerManager implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerJoin(PlayerJoinEvent e){
-		MineQuest.log("[Player] Retrieving details for player " + e.getPlayer().getName());
+		Managers.log("[Player] Retrieving details for player " + e.getPlayer().getName());
 		playerAcct(e.getPlayer());
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerQuit(PlayerQuitEvent e){
-		MineQuest.log("[Player] Saving details for player " + e.getPlayer().getName());
-		try {
-			PlayerSQL.updatePlayerObject(e.getPlayer().getName(), getPlayerDetails(e.getPlayer()));
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
+		Managers.log("[Player] Saving details for player " + e.getPlayer().getName());
+		Managers.getStatisticManager().setStatistic(getPlayerDetails(e.getPlayer()), PlayerDetails.class);
 		players.remove(e.getPlayer());
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerKick(PlayerKickEvent e){
-		MineQuest.log("[Player] Saving details for player " + e.getPlayer().getName());
-		try {
-			PlayerSQL.updatePlayerObject(e.getPlayer().getName(), getPlayerDetails(e.getPlayer()));
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
+		Managers.log("[Player] Saving details for player " + e.getPlayer().getName());
+		Managers.getStatisticManager().setStatistic(getPlayerDetails(e.getPlayer()), PlayerDetails.class);
 		players.remove(e.getPlayer());
 	}
 

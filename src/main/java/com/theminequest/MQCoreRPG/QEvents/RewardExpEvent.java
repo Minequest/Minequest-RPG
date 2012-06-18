@@ -1,7 +1,7 @@
 /*
  * This file, RewardExpEvent.java, is part of MineQuest:
  * A full featured and customizable quest/mission system.
- * Copyright (C) 2012 The MineQuest Team
+ * Copyright (C) 2012 The MineQuest Party
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,23 +22,21 @@ package com.theminequest.MQCoreRPG.QEvents;
 import org.bukkit.entity.Player;
 
 import com.theminequest.MQCoreRPG.MQCoreRPG;
-import com.theminequest.MineQuest.CompleteStatus;
 import com.theminequest.MineQuest.MineQuest;
-import com.theminequest.MineQuest.EventsAPI.QEvent;
-import com.theminequest.MineQuest.Group.Group;
-import com.theminequest.MineQuest.Group.Team;
+import com.theminequest.MineQuest.API.CompleteStatus;
+import com.theminequest.MineQuest.API.Managers;
+import com.theminequest.MineQuest.API.Events.QuestEvent;
+import com.theminequest.MineQuest.API.Group.Group;
+import com.theminequest.MineQuest.API.Group.QuestGroup;
+import com.theminequest.MineQuest.Group.Party;
 
-public class RewardExpEvent extends QEvent {
+public class RewardExpEvent extends QuestEvent {
 	
 	private int exptogive;
 
-	public RewardExpEvent(long q, int e, String details) {
-		super(q, e, details);
-	}
-
 	/*
 	 * (non-Javadoc)
-	 * @see com.theminequest.MineQuest.EventsAPI.QEvent#parseDetails(java.lang.String[])
+	 * @see com.theminequest.MineQuest.Events.QEvent#parseDetails(java.lang.String[])
 	 * Details:
 	 * [0] amount of exp to give.
 	 */
@@ -54,10 +52,9 @@ public class RewardExpEvent extends QEvent {
 
 	@Override
 	public CompleteStatus action() {
-		long gid = MineQuest.groupManager.indexOfQuest(MineQuest.questManager.getQuest(getQuestId()));
-		Group g = MineQuest.groupManager.getGroup(gid);
-		for (Player p : g.getPlayers())
-			MQCoreRPG.playerManager.getPlayerDetails(p).modifyExperienceBy(exptogive/g.getPlayers().size());
+		QuestGroup g = Managers.getQuestGroupManager().get(getQuest());
+		for (Player p : g.getMembers())
+			MQCoreRPG.playerManager.getPlayerDetails(p).modifyExperienceBy(exptogive/g.getMembers().size());
 		return CompleteStatus.SUCCESS;
 	}
 

@@ -13,7 +13,7 @@ import org.bukkit.entity.EntityType;
 import static org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.theminequest.MQCoreRPG.MQCoreRPG;
-import com.theminequest.MineQuest.Utils.PropertiesFile;
+import com.theminequest.MineQuest.API.Utils.PropertiesFile;
 
 public class ClassDetails {
 	

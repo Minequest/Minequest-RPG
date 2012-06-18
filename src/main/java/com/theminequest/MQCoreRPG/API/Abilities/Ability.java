@@ -1,7 +1,7 @@
 /**
  * This file, Ability.java, is part of MineQuest:
  * A full featured and customizable quest/mission system.
- * Copyright (C) 2012 The MineQuest Team
+ * Copyright (C) 2012 The MineQuest Party
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +19,7 @@
  **/
 package com.theminequest.MQCoreRPG.API.Abilities;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -36,11 +37,20 @@ import com.theminequest.MQCoreRPG.BukkitEvents.AbilityRefreshedEvent;
 import com.theminequest.MQCoreRPG.Class.ClassDetails;
 import com.theminequest.MQCoreRPG.Player.PlayerDetails;
 import com.theminequest.MineQuest.MineQuest;
-import com.theminequest.MineQuest.Group.Group;
+import com.theminequest.MineQuest.API.Managers;
+import com.theminequest.MineQuest.API.Group.Group;
+import com.theminequest.MineQuest.API.Group.QuestGroup;
+import com.theminequest.MineQuest.API.Group.QuestGroup.QuestStatus;
 import com.theminequest.MineQuest.Quest.QuestManager;
 
-public abstract class Ability {
+public abstract class Ability implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1174222384766705352L;
+	public static final String DETAILS_KEY = "rpg.bannedabilities";
+
 	/**
 	 * Give this ability a name, please?
 	 * @return ability name
@@ -98,15 +108,15 @@ public abstract class Ability {
 	 * @param p Player Name
 	 */
 	public boolean questAllow(Player p){
-		long teamid = MineQuest.groupManager.indexOf(p);
+		long teamid = Managers.getGroupManager().indexOf(p);
 		if (teamid==-1)
 			return true;
-		Group g = MineQuest.groupManager.getGroup(teamid);
+		QuestGroup g = Managers.getQuestGroupManager().get(p);
 		// outside the quest, of course you can use abilities
-		if (!g.isInQuest())
+		if (g.getQuestStatus()!=QuestStatus.INQUEST)
 			return true;
 		// inside the quest...
-		String abilities = (String) g.getQuest().details.database.get("bannedabilities");
+		String abilities = (String) g.getQuest().getDetails().getProperty(DETAILS_KEY);
 		if (abilities==null)
 			return true;
 		for (String s : abilities.split(",")){
@@ -162,7 +172,7 @@ public abstract class Ability {
 		pd.abilitiesCoolDown.put(this, System.currentTimeMillis()*1000);
 		player.sendMessage(ChatColor.GRAY + "Used ability " + getName() + ".");
 		final Ability a = this;
-		Bukkit.getScheduler().scheduleAsyncDelayedTask(MineQuest.activePlugin,
+		Bukkit.getScheduler().scheduleAsyncDelayedTask(Managers.getActivePlugin(),
 				new Runnable(){
 
 					@Override

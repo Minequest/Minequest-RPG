@@ -13,8 +13,9 @@ import com.theminequest.MQCoreRPG.MQCoreRPG;
 import com.theminequest.MQCoreRPG.Player.PlayerDetails;
 import com.theminequest.MQCoreRPG.Player.PlayerManager;
 import com.theminequest.MineQuest.MineQuest;
+import com.theminequest.MineQuest.API.Managers;
+import com.theminequest.MineQuest.API.Utils.ChatUtils;
 import com.theminequest.MineQuest.Frontend.Command.CommandFrontend;
-import com.theminequest.MineQuest.Utils.ChatUtils;
 
 public class PlayerCommandFrontend extends CommandFrontend {
 
@@ -238,7 +239,7 @@ public class PlayerCommandFrontend extends CommandFrontend {
 		List<String> messages = new ArrayList<String>();
 		messages.add(ChatUtils.formatHeader("Player Information: " + lookup.getName()));
 		messages.add(ChatColor.AQUA + "Display Name: " + ChatColor.WHITE + lookup.getDisplayName());
-		messages.add(ChatColor.AQUA + "On Team: " + ChatColor.WHITE + (MineQuest.groupManager.indexOf(lookup)!=-1));
+		messages.add(ChatColor.AQUA + "On Party: " + ChatColor.WHITE + (Managers.getGroupManager().indexOf(lookup)!=-1));
 		messages.add(ChatColor.AQUA + "Health: " + ChatColor.WHITE + details.getHealth() + "/" + (details.getMaxHealth()));
 		messages.add(ChatColor.AQUA + "Level: " + ChatColor.WHITE + details.getLevel());
 		if (p.equals(lookup) || !(c instanceof Player)){

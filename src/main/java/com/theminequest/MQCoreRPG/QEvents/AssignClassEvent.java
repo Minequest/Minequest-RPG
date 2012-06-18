@@ -4,22 +4,20 @@ import org.bukkit.entity.Player;
 
 import com.theminequest.MQCoreRPG.MQCoreRPG;
 import com.theminequest.MQCoreRPG.Player.PlayerDetails;
-import com.theminequest.MineQuest.CompleteStatus;
 import com.theminequest.MineQuest.MineQuest;
-import com.theminequest.MineQuest.EventsAPI.QEvent;
-import com.theminequest.MineQuest.Group.Group;
+import com.theminequest.MineQuest.API.CompleteStatus;
+import com.theminequest.MineQuest.API.Managers;
+import com.theminequest.MineQuest.API.Events.QuestEvent;
+import com.theminequest.MineQuest.API.Group.Group;
+import com.theminequest.MineQuest.API.Group.QuestGroup;
 
-public class AssignClassEvent extends QEvent {
+public class AssignClassEvent extends QuestEvent {
 	
 	private String classname;
 
-	public AssignClassEvent(long q, int e, String details) {
-		super(q, e, details);
-	}
-
 	/*
 	 * (non-Javadoc)
-	 * @see com.theminequest.MineQuest.EventsAPI.QEvent#parseDetails(java.lang.String[])
+	 * @see com.theminequest.MineQuest.Events.QEvent#parseDetails(java.lang.String[])
 	 * [0] Class Identifier (name)
 	 */
 	@Override
@@ -34,8 +32,8 @@ public class AssignClassEvent extends QEvent {
 
 	@Override
 	public CompleteStatus action() {
-		Group g = MineQuest.groupManager.getGroup(MineQuest.groupManager.indexOfQuest(MineQuest.questManager.getQuest(getQuestId())));
-		for (Player p : g.getPlayers()){
+		QuestGroup g = Managers.getQuestGroupManager().get(getQuest());
+		for (Player p : g.getMembers()){
 			PlayerDetails d = MQCoreRPG.playerManager.getPlayerDetails(p);
 			d.setClassID(classname);
 		}

@@ -14,12 +14,13 @@ import org.getspout.spoutapi.player.SpoutPlayer;
 import com.theminequest.MQCoreRPG.MQCoreRPG;
 import com.theminequest.MQCoreRPG.BukkitEvents.PlayerLevelEvent;
 import com.theminequest.MineQuest.MineQuest;
+import com.theminequest.MineQuest.API.Managers;
 
 public class PopupManager implements Listener {
 	
 	public PopupManager() throws ClassNotFoundException{
 		Class.forName("org.getspout.spoutapi.Spout");
-		MineQuest.log("[Popup] Starting Manager...");
+		Managers.log("[Popup] Starting Manager...");
 	}
 	
 	public void triggerNotificationPopup(Player player, String message){
@@ -35,7 +36,7 @@ public class PopupManager implements Listener {
 	}
 	
 	/*
-	 * Borrowed from RpgEssentials :<
+	 * Borrowed from RpgEssentials :< TODO: Maybe get from MobHealth as well?
 	 */
 	public void triggerExpPopup(Player player, int addexp){
 		final SpoutPlayer splayer = SpoutManager.getPlayer(player);
