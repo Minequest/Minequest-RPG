@@ -30,7 +30,8 @@ public class ClassManager implements Listener {
 		initialize();
 		ClassDetails def = new ClassDetails();
 		def.saveDefault();
-		classes.put("default", def);
+		if (!classes.containsKey("default"))
+			classes.put("default", def);
 	}
 
 	public boolean hasClassDetail(String name) {

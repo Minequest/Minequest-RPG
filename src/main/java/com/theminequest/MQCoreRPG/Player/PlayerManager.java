@@ -52,14 +52,14 @@ import com.theminequest.MineQuest.API.Managers;
 
 public class PlayerManager implements Listener {
 
-	private Map<Player, PlayerDetails> players;
+	private Map<String, PlayerDetails> players;
 	private volatile boolean shutdown;
 	public static final int MAX_LEVEL = 50;
 
 	public PlayerManager() {
 		Managers.log("[Player] Starting Manager...");
 		players = Collections
-				.synchronizedMap(new LinkedHashMap<Player, PlayerDetails>());
+				.synchronizedMap(new LinkedHashMap<String, PlayerDetails>());
 		shutdown = false;
 
 		Managers.getStatisticManager().registerStatistic(PlayerDetails.class);
@@ -145,20 +145,18 @@ public class PlayerManager implements Listener {
 	}
 
 	private void playerAcct(Player p) {
-		if (!players.containsKey(p)) {
-			PlayerDetails obj;
-			obj = Managers.getStatisticManager().getStatistic(p.getName(),
-					PlayerDetails.class);
-			if (obj != null) {
+		if (!players.containsKey(p.getName())) {
+			PlayerDetails obj = Managers.getStatisticManager().getStatistic(p.getName(),PlayerDetails.class);
+			if (obj.getUUID()!=0) {
 				obj.resetupPlayerDetails();
-				players.put(p, obj);
+				players.put(p.getName(), obj);
 				return;
 			}
 			obj = new PlayerDetails();
 			obj.setupPlayerDetails(p);
 			Managers.getStatisticManager().setStatistic(obj,
 					PlayerDetails.class);
-			players.put(p, obj);
+			players.put(p.getName(), obj);
 			PlayerRegisterEvent e = new PlayerRegisterEvent(p);
 			Bukkit.getPluginManager().callEvent(e);
 		}
@@ -166,7 +164,7 @@ public class PlayerManager implements Listener {
 
 	public PlayerDetails getPlayerDetails(Player p) {
 		playerAcct(p);
-		return players.get(p);
+		return players.get(p.getName());
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)

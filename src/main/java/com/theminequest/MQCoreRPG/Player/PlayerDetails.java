@@ -64,14 +64,22 @@ public class PlayerDetails extends Statistic implements Serializable {
 	// player properties
 	@Field
 	private long health;
+	
 	@Field
 	private long power;
+	
 	@Field
 	private int level;
+	
 	@Field
 	private long exp;
+	
 	@Field
 	private String classid;
+	
+	public long getUUID(){
+		return uuid;
+	}
 
 	public void setupPlayerDetails(Player p) {
 		this.setPlayerName(p.getName());
