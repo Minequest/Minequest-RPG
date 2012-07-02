@@ -16,15 +16,15 @@
 		<!-- Publish versioned releases here -->
 		<repository>
 			<id>nexus</id>
-			<name>Nexus.Lincom</name>
-			<url>http://build.lincomlinux.org/nexus/content/repositories/releases</url>
+			<name>nexus.alta189</name>
+			<url>http://nexus.alta189.com/content/repositories/releases</url>
 		</repository>
 
 		<!-- Publish snapshots here -->
 		<snapshotRepository>
 			<id>nexus</id>
-			<name>Nexus.Lincom</name>
-			<url>http://build.lincomlinux.org/nexus/content/repositories/snapshots</url>
+			<name>nexus.alta189</name>
+			<url>http://nexus.alta189.com/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<dependencies>
@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>com.theminequest</groupId>
 			<artifactId>MineQuest</artifactId>
-			<version>dev-SNAPSHOT</version>
+			<version>2.0.0-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
@@ -110,8 +110,8 @@
 	</build>
 	<repositories>
 		<repository>
-			<id>lincom-repo</id>
-			<url>http://build.lincomlinux.org/nexus/content/groups/public/</url>
+			<id>alta189-repo</id>
+			<url>http://repo.alta189.com/</url>
 		</repository>
 		<repository>
 			<id>bukkit-repo</id>

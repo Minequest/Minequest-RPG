@@ -21,6 +21,7 @@ package com.theminequest.MQCoreRPG.Player;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
@@ -138,7 +139,7 @@ public class PlayerManager implements Listener {
 	public void saveAll() {
 		synchronized (players) {
 			for (PlayerDetails d : players.values()) {
-				Managers.getStatisticManager().setStatistic(d,
+				Managers.getStatisticManager().saveStatistic(d,
 						PlayerDetails.class);
 			}
 		}
@@ -146,15 +147,17 @@ public class PlayerManager implements Listener {
 
 	private void playerAcct(Player p) {
 		if (!players.containsKey(p.getName())) {
-			PlayerDetails obj = Managers.getStatisticManager().getStatistic(p.getName(),PlayerDetails.class);
-			if (obj.getUUID()!=0) {
+			List<PlayerDetails> d = Managers.getStatisticManager().getStatistics(p.getName(), PlayerDetails.class);
+			PlayerDetails obj;
+			if (d.size()!=0){
+				obj = d.get(0);
 				obj.resetupPlayerDetails();
 				players.put(p.getName(), obj);
 				return;
 			}
 			obj = new PlayerDetails();
 			obj.setupPlayerDetails(p);
-			Managers.getStatisticManager().setStatistic(obj,
+			Managers.getStatisticManager().saveStatistic(obj,
 					PlayerDetails.class);
 			players.put(p.getName(), obj);
 			PlayerRegisterEvent e = new PlayerRegisterEvent(p);
@@ -178,7 +181,7 @@ public class PlayerManager implements Listener {
 	public void onPlayerQuit(PlayerQuitEvent e) {
 		Managers.log("[Player] Saving details for player "
 				+ e.getPlayer().getName());
-		Managers.getStatisticManager().setStatistic(
+		Managers.getStatisticManager().saveStatistic(
 				getPlayerDetails(e.getPlayer()), PlayerDetails.class);
 		players.remove(e.getPlayer());
 	}
@@ -187,7 +190,7 @@ public class PlayerManager implements Listener {
 	public void onPlayerKick(PlayerKickEvent e) {
 		Managers.log("[Player] Saving details for player "
 				+ e.getPlayer().getName());
-		Managers.getStatisticManager().setStatistic(
+		Managers.getStatisticManager().saveStatistic(
 				getPlayerDetails(e.getPlayer()), PlayerDetails.class);
 		players.remove(e.getPlayer());
 	}

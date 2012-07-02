@@ -240,4 +240,10 @@ public class PlayerDetails extends Statistic implements Serializable {
 		return h;
 	}
 
+	@Override
+	public void setup() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
