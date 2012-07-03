@@ -147,7 +147,7 @@ public class PlayerManager implements Listener {
 
 	private void playerAcct(Player p) {
 		if (!players.containsKey(p.getName())) {
-			List<PlayerDetails> d = Managers.getStatisticManager().getStatistics(p.getName(), PlayerDetails.class);
+			List<PlayerDetails> d = Managers.getStatisticManager().getAllStatistics(p.getName(), PlayerDetails.class);
 			PlayerDetails obj;
 			if (d.size()!=0){
 				obj = d.get(0);

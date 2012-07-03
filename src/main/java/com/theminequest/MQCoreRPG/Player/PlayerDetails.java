@@ -38,7 +38,7 @@ import com.theminequest.MQCoreRPG.BukkitEvents.PlayerExperienceEvent;
 import com.theminequest.MQCoreRPG.BukkitEvents.PlayerHealthEvent;
 import com.theminequest.MQCoreRPG.BukkitEvents.PlayerLevelEvent;
 import com.theminequest.MQCoreRPG.BukkitEvents.PlayerPowerEvent;
-import com.theminequest.MineQuest.API.Tracker.StatisticManager.Statistic;
+import com.theminequest.MineQuest.API.Tracker.Statistic;
 
 @Table("minequest_rpg_players")
 public class PlayerDetails extends Statistic implements Serializable {
