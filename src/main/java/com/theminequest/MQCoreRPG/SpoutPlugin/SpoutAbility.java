@@ -1,13 +1,15 @@
 package com.theminequest.MQCoreRPG.SpoutPlugin;
 
-import com.theminequest.MQCoreRPG.API.Abilities.Ability;
+import java.io.Serializable;
 
-public abstract class SpoutAbility extends Ability {
+import com.theminequest.MQCoreRPG.Ability.Ability;
+
+public interface SpoutAbility extends Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3656060979552594479L;
+	static final long serialVersionUID = 3656060979552594479L;
 
 	/**
 	 * With SpoutAbility, you can now give this ability an image in the HUD.

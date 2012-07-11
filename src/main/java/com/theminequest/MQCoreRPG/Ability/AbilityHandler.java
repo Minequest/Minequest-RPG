@@ -1,4 +1,4 @@
-package com.theminequest.MQCoreRPG.API.Abilities;
+package com.theminequest.MQCoreRPG.Ability;
 
 import java.util.List;
 

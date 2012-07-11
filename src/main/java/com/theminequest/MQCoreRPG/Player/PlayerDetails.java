@@ -32,7 +32,7 @@ import com.alta189.simplesave.Field;
 import com.alta189.simplesave.Id;
 import com.alta189.simplesave.Table;
 import com.theminequest.MQCoreRPG.MQCoreRPG;
-import com.theminequest.MQCoreRPG.API.Abilities.Ability;
+import com.theminequest.MQCoreRPG.Ability.Ability;
 import com.theminequest.MQCoreRPG.BukkitEvents.PlayerClassEvent;
 import com.theminequest.MQCoreRPG.BukkitEvents.PlayerExperienceEvent;
 import com.theminequest.MQCoreRPG.BukkitEvents.PlayerHealthEvent;

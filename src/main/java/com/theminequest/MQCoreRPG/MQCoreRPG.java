@@ -5,8 +5,8 @@ import java.util.logging.Level;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.theminequest.MQCoreRPG.API.Abilities.AbilityHandler;
-import com.theminequest.MQCoreRPG.API.Abilities.AbilityManager;
+import com.theminequest.MQCoreRPG.Ability.AbilityHandler;
+import com.theminequest.MQCoreRPG.Ability.AbilityManager;
 import com.theminequest.MQCoreRPG.Class.ClassManager;
 import com.theminequest.MQCoreRPG.Commands.PlayerCommandFrontend;
 import com.theminequest.MQCoreRPG.Commands.StopExecutor;

@@ -23,7 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.theminequest.MQCoreRPG.API.Abilities.Ability;
+import com.theminequest.MQCoreRPG.Ability.Ability;
 
 public class AbilityRefreshedEvent extends Event {
 
