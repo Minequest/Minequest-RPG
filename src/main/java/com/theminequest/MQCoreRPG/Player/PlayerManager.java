@@ -232,17 +232,17 @@ public class PlayerManager implements Listener {
 
 	// Damage START
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent e) {
 		damageEvents(e);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityDamageByBlockEvent(EntityDamageByBlockEvent e) {
 		damageEvents(e);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityDamageEvent(EntityDamageEvent e) {
 		damageEvents(e);
 	}
@@ -254,6 +254,8 @@ public class PlayerManager implements Listener {
 		if (p.getGameMode() == GameMode.CREATIVE)
 			return;
 		PlayerDetails d = getPlayerDetails(p);
+		if (d==null) // make way for hacky plugins!
+			return;
 		ClassDetails c = MQCoreRPG.classManager.getClassDetail(d.getClassID());
 		int amount = c.getDamageFromCause(e.getCause()) + e.getDamage();
 		long total = d.getHealth() - amount;
@@ -293,6 +295,8 @@ public class PlayerManager implements Listener {
 	public void onPlayerDeath(PlayerDeathEvent e) {
 		e.setDroppedExp(0);
 		PlayerDetails p = getPlayerDetails(e.getEntity());
+		if (p==null) // make way for hacky plugins!
+			return;
 		p.setHealth(0);
 		p.giveMana = false;
 	}
