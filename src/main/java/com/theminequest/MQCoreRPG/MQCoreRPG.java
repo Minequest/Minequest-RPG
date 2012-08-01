@@ -60,7 +60,7 @@ public class MQCoreRPG extends JavaPlugin {
 		Managers.getQuestManager().getParser()
 				.addClassHandler("bannedabilities", AbilityHandler.class);
 		MineQuest.commandListener.helpmenu.put("player",
-				"List player commands. (RPG)");
+				"(RPG) List player commands.");
 	}
 
 	@Override
