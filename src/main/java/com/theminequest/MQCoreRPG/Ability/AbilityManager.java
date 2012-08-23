@@ -20,8 +20,12 @@
 package com.theminequest.MQCoreRPG.Ability;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -35,11 +39,13 @@ import com.theminequest.MineQuest.API.Managers;
 
 public class AbilityManager implements Listener {
 
-	private HashMap<String, Ability> abilities;
+	private Map<String, Ability> abilities;
+	private Map<Player, Map<Material,Ability>> binds;
 
 	public AbilityManager() {
 		Managers.log("[Ability] Starting Manager...");
-		abilities = new HashMap<String, Ability>();
+		abilities = new LinkedHashMap<String, Ability>();
+		
 	}
 
 	public void registerAbility(Ability a) {
@@ -54,16 +60,6 @@ public class AbilityManager implements Listener {
 		e.getPlayer().sendMessage(
 				ChatColor.GRAY + "Ability " + e.getAbility().getName()
 						+ " recharged!");
-	}
-
-	@EventHandler
-	public void onPlayerEggThrowEvent(PlayerEggThrowEvent e) {
-		onEvent(e);
-	}
-
-	@EventHandler
-	public void onPlayerFishEvent(PlayerFishEvent e) {
-		onEvent(e);
 	}
 
 	@EventHandler
