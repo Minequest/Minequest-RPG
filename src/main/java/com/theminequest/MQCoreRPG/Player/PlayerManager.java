@@ -166,7 +166,7 @@ public class PlayerManager implements Listener {
 	}
 
 	public PlayerDetails getPlayerDetails(Player p) {
-		playerAcct(p);
+		//playerAcct(p);
 		return players.get(p.getName());
 	}
 
