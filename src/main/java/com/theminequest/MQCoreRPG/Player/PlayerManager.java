@@ -210,7 +210,7 @@ public class PlayerManager implements Listener {
 		case MAGIC_REGEN:
 		case REGEN:
 		case SATIATED:
-			total = d.getHealth() + amount * d.getLevel();
+			total = d.getHealth() + (amount * d.getLevel());
 			break;
 		}
 		if (total > d.getMaxHealth())
@@ -272,7 +272,8 @@ public class PlayerManager implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerExpChangeEvent(PlayerExpChangeEvent e) {
-		e.setAmount(0);
+		if (e.getAmount() < 0)
+			e.setAmount(0);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
