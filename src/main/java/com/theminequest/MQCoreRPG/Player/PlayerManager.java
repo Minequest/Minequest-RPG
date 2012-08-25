@@ -186,15 +186,6 @@ public class PlayerManager implements Listener {
 		players.remove(e.getPlayer());
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerKick(PlayerKickEvent e) {
-		Managers.log("[Player] Saving details for player "
-				+ e.getPlayer().getName());
-		Managers.getStatisticManager().saveStatistic(
-				getPlayerDetails(e.getPlayer()), PlayerDetails.class);
-		players.remove(e.getPlayer());
-	}
-
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onFoodLevelChangeEvent(FoodLevelChangeEvent e) {
 		if (!(e.getEntity() instanceof Player))
