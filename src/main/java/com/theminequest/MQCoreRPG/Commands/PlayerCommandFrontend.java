@@ -22,18 +22,7 @@ public class PlayerCommandFrontend extends CommandFrontend {
 
 	// TODO Implement localization fully.
 
-	public Boolean clear(Player p, String[] args) {
-		if (p != null) {
-			if (!p.isOp())
-				return false;
-		}
-
-		CommandSender c;
-		if (p == null)
-			c = Bukkit.getConsoleSender();
-		else
-			c = p;
-
+	public Boolean clear(CommandSender c, String[] args) {
 		if (args.length != 1) {
 			c.sendMessage("Invalid number of arguments.");
 			return false;
@@ -53,17 +42,7 @@ public class PlayerCommandFrontend extends CommandFrontend {
 		return true;
 	}
 
-	public Boolean setlevel(Player p, String[] args) {
-		if (p != null) {
-			if (!p.isOp())
-				return false;
-		}
-
-		CommandSender c;
-		if (p == null)
-			c = Bukkit.getConsoleSender();
-		else
-			c = p;
+	public Boolean setlevel(CommandSender c, String[] args) {
 
 		if (args.length != 2) {
 			c.sendMessage("Invalid number of arguments.");
@@ -83,17 +62,7 @@ public class PlayerCommandFrontend extends CommandFrontend {
 		return true;
 	}
 
-	public Boolean setclass(Player p, String[] args) {
-		if (p != null) {
-			if (!p.isOp())
-				return false;
-		}
-
-		CommandSender c;
-		if (p == null)
-			c = Bukkit.getConsoleSender();
-		else
-			c = p;
+	public Boolean setclass(CommandSender c, String[] args) {
 
 		if (args.length != 2) {
 			c.sendMessage("Invalid number of arguments.");
@@ -118,17 +87,7 @@ public class PlayerCommandFrontend extends CommandFrontend {
 		return true;
 	}
 
-	public Boolean giveexp(Player p, String[] args) {
-		if (p != null) {
-			if (!p.isOp())
-				return false;
-		}
-
-		CommandSender c;
-		if (p == null)
-			c = Bukkit.getConsoleSender();
-		else
-			c = p;
+	public Boolean giveexp(CommandSender c, String[] args) {
 
 		if (args.length != 2) {
 			c.sendMessage("Invalid number of arguments.");
@@ -148,18 +107,7 @@ public class PlayerCommandFrontend extends CommandFrontend {
 		return true;
 	}
 
-	public Boolean levelup(Player p, String[] args) {
-		if (p != null) {
-			if (!p.isOp())
-				return false;
-		}
-
-		CommandSender c;
-		if (p == null)
-			c = Bukkit.getConsoleSender();
-		else
-			c = p;
-
+	public Boolean levelup(CommandSender c, String[] args) {
 		if (args.length != 1) {
 			c.sendMessage("Invalid number of arguments.");
 			return false;
@@ -178,18 +126,11 @@ public class PlayerCommandFrontend extends CommandFrontend {
 		return true;
 	}
 
-	public Boolean heal(Player p, String[] args) {
-		if (p != null) {
-			if (!p.isOp())
-				return false;
-		}
-
-		CommandSender c;
-		if (p == null)
-			c = Bukkit.getConsoleSender();
-		else
-			c = p;
-
+	public Boolean heal(CommandSender c, String[] args) {
+		Player p = null;
+		if (c instanceof Player)
+			p = (Player)c;
+		
 		if (args.length > 1) {
 			c.sendMessage("Invalid number of arguments.");
 			return false;
@@ -213,12 +154,10 @@ public class PlayerCommandFrontend extends CommandFrontend {
 
 	}
 
-	public Boolean info(Player p, String[] args) {
-		CommandSender c;
-		if (p == null)
-			c = Bukkit.getConsoleSender();
-		else
-			c = p;
+	public Boolean info(CommandSender c, String[] args) {
+		Player p = null;
+		if (c instanceof Player)
+			p = (Player)c;
 
 		if (args.length > 1) {
 			c.sendMessage("Invalid number of arguments.");
@@ -266,11 +205,11 @@ public class PlayerCommandFrontend extends CommandFrontend {
 	}
 
 	@Override
-	public Boolean help(Player p, String[] args) {
+	public void help(CommandSender sender, String[] args) {
 		List<String> messages = new ArrayList<String>();
 
 		// CONSOLE COMMANDS
-		if (p == null || p.isOp()) {
+		if (sender.hasPermission("minequest.command.player.helpop")) {
 			messages.add(ChatUtils.formatHeader("Op Commands"));
 			messages.add(ChatUtils.formatHelp("player clear [name]",
 					"Clear a user's statistics completely."));
@@ -290,22 +229,18 @@ public class PlayerCommandFrontend extends CommandFrontend {
 				"Retrieve your information."));
 		messages.add(ChatUtils.formatHelp("player info <name>",
 				"Retrieve Player Information."));
-		if (p == null) {
-			CommandSender c = Bukkit.getConsoleSender();
-			for (String s : messages) {
-				c.sendMessage(s);
-			}
-		} else {
-			for (String s : messages) {
-				p.sendMessage(s);
-			}
-		}
-		return true;
+		for (String s: messages)
+			sender.sendMessage(s);
 	}
 
 	@Override
 	public boolean allowConsole() {
 		return true;
+	}
+
+	@Override
+	public void noOptionSpecified(CommandSender sender, String[] args) {
+		help(sender,args);
 	}
 
 }
